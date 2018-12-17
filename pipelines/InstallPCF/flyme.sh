@@ -1,4 +1,4 @@
-fly -t mgmtplane \
+fly -t gcp \
 	set-pipeline \
 	-p gcplab01 \
 	-c base_pipeline.yml \
