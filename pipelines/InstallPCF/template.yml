@@ -1,0 +1,166 @@
+# Resources
+- type: replace
+  path: /resources/-
+  value:
+    name: ((product_name))-product
+    type: pivnet
+    source:
+      api_token: ((pivnet_token))
+      product_slug: ((product_name))
+      product_version: ((product_version))
+      sort_by: semver
+
+- type: replace
+  path: /resources/-
+  value:
+    name: ((product_name))-stemcell
+    type: pivnet
+    source:
+      api_token: ((pivnet_token))
+      product_slug: ((product_stemcell_slug))
+      product_version: ((product_stemcell_version))
+
+# Add upload and stage job
+- type: replace
+  path: /jobs?/-
+  value:
+    name: upload-and-stage-((product_name))
+    serial: true
+    plan:
+    - aggregate:
+      - get: pcf-automation-image
+        params:
+          unpack: true
+          globs: ["*.tgz"]
+        passed:
+        - upgrade-opsman
+        trigger: true
+      - get: pcf-automation-tasks
+        params:
+          unpack: true
+          globs: ["*.zip"]
+      - get: ((product_name))-product
+        params:
+          globs: [((product_glob))]
+      - get: configuration
+      - get: variable
+    
+    - task: generate-env
+      file: configuration/tasks/generate-env/task.yml
+      params:
+        YAML: ((opsman_env))
+        FILENAME: env.yml
+
+    - task: upload-and-stage-product
+      image: pcf-automation-image
+      file: pcf-automation-tasks/tasks/upload-and-stage-product.yml
+      input_mapping:
+        product: ((product_name))-product
+        env: env
+      params:
+        ENV_FILE: env.yml
+
+# Add configure product job
+- type: replace
+  path: /jobs?/-
+  value:
+    name: configure-((product_name))
+    serial: true
+    plan:
+    - aggregate:
+      - get: pcf-automation-image
+        params:
+          unpack: true
+          globs: ["*.tgz"]
+        passed:
+        - upload-and-stage-((product_name))
+        trigger: true
+      - get: pcf-automation-tasks
+        params:
+          unpack: true
+          globs: ["*.zip"]
+      - get: configuration
+      - get: variable
+      - get: pipeline-utilities
+
+    - task: generate-env
+      file: configuration/tasks/generate-env/task.yml
+      params:
+        YAML: ((opsman_env))
+        FILENAME: env.yml
+
+    - task: extract-((product_name))-secrets
+      file: pipeline-utilities/tasks/create-product-secrets.yml
+      params:
+        ((product_secrets))
+          
+    - task: configure-((product_name))
+      image: pcf-automation-image
+      file: pcf-automation-tasks/tasks/configure-product.yml
+      input_mapping:
+        config: configuration
+        env: env
+        vars: variable
+        secrets: secrets
+      params:
+        CONFIG_FILE: ((foundation))/config/((product_name)).yml
+        VARS_FILES: |
+          vars/((product_location))/product-default-vars.yml
+          vars/((product_location))/errand-vars.yml
+          vars/((product_location))/resource-vars.yml
+          vars/((foundation))/config/((product_name))-vars.yml
+          secrets/product.yml
+        ENV_FILE: env.yml
+
+# Add upload stemcell job
+- type: replace
+  path: /jobs?/-
+  value:
+    name: upload-stemcell-((product_name))
+    serial: true
+    plan:
+    - aggregate:
+      - get: pcf-automation-image
+        params:
+          unpack: true
+          globs: ["*.tgz"]
+        passed:
+        - upgrade-opsman
+        trigger: true
+      - get: pcf-automation-tasks
+        params:
+          unpack: true
+          globs: ["*.zip"]
+      - get: ((product_name))-stemcell
+        trigger: true
+        params:
+          globs: ["*-azure*"]
+      - get: configuration
+      - get: pipeline-utilities
+    
+    # This is done in two different ways in this pipeline... just to show the options.
+    - task: generate-env
+      file: pipeline-utilities/tasks/create-env-file.yml
+      params:
+        OPSMAN_USERNAME: ((opsman_env.username))
+        OPSMAN_PASSWORD: ((opsman_env.password))
+        OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_env.decryption-passphrase))
+        OPSMAN_TARGET: ((opsman_env.target))
+        OPSMAN_CONNECT_TIMEOUT: ((opsman_env.connect-timeout))
+        OPSMAN_REQUEST_TIMEOUT: ((opsman_env.request-timeout))
+        OPSMAN_SKIP_SSL_VALIDATION: ((opsman_env.skip-ssl-validation))
+
+    - task: upload-stemcell-((product_name))
+      image: pcf-automation-image
+      file: pcf-automation-tasks/tasks/upload-stemcell.yml
+      input_mapping:
+        env: env
+        stemcell: ((product_name))-stemcell
+      params:
+        ENV_FILE: env.yml
+
+# Add config to apply-changes passed criteria
+- type: replace
+  path: /jobs/name=apply-product-changes/plan/0/aggregate/get=pcf-automation-image/passed?/-
+  value:
+    configure-((product_name))

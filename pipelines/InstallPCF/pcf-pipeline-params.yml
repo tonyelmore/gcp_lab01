@@ -1,0 +1,17 @@
+pivnet_token: ((pivnet_token))
+pcf_automation_version: 1.0.0-beta.1
+opsman_version: ^2\.3\.[0-9]+$
+opsman_image_wildcard: '*GCP.yml'
+foundation: gcplab01
+configuration:
+    private_key: ((telmore-github-creds.private_key))
+    uri: git@github.com:tonyelmore/lab02-azure-install.git
+variable:
+    private_key: ((telmore-github-creds.private_key))
+    uri: git@github.com:tonyelmore/lab02-azure-install.git
+
+# Define blob store for installation exports
+installation:
+    storage_account_name: gcplab01installationexport
+    storage_account_key: ((installation_export_storage_account_key))
+    container: installation

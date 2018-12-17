@@ -1,0 +1,36 @@
+active_products:
+  healthwatch.yml
+  apm.yml
+
+apm_product:
+  product_location: tilegen/apmPostgres/1.5.1-build.28
+  product_name: apmPostgres
+  product_version: "^1\\.5\\.[0-9]+$"
+  product_glob: "*.pivotal"
+  product_stemcell_slug: "stemcells"
+  product_stemcell_version: "^3586\\..*$"
+  product_secrets:
+    PRODUCT_placeholder: placeholder
+
+rabbitmq_product:
+    active: true
+    product_location: tilegen/p-rabbitmq/1.14.4
+    product_name: p-rabbitmq
+    product_version: "^1\\.14\\.[0-9]+$"
+    product_glob: "*.pivotal"
+    product_stemcell_slug: "stemcells"
+    product_stemcell_version: "^3586\\..*$"
+    product_secrets:
+      PRODUCT_multitenant_support/enabled/server_admin_credentials_identity: ((rabbitmq-server-admin.username))
+      PRODUCT_multitenant_support/enabled/server_admin_credentials_password: ((rabbitmq-server-admin.password))
+
+healthwatch_product:
+    active: false
+    product_location: tilegen/p-healthwatch/1.4.4-build.1
+    product_name: p-healthwatch
+    product_version: "^1\\.4\\.[0-9]+$"
+    product_glob: "*.pivotal"
+    product_stemcell_slug: "stemcells-ubuntu-xenial"
+    product_stemcell_version: "^97\\..*$"
+    product_secrets:
+      PRODUCT_placeholder: placeholder

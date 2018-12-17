@@ -1,0 +1,307 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+# Need to replace this with GCP blobstore
+- name: azure-blobstore
+  type: docker-image
+  source:
+    repository: pcfabr/azure-blobstore-resource
+
+resources:
+- name: pcf-automation-tasks
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: platform-automation
+    product_version: ((pcf_automation_version))
+
+- name: pcf-automation-image
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: platform-automation
+    product_version: ((pcf_automation_version))
+
+- name: opsman-image
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: ops-manager
+    product_version: ((opsman_version))
+
+- name: pipeline-utilities
+  type: git
+  source:
+    uri: https://github.com/pivotalservices/pipeline-utilities.git
+
+- name: installation
+  type: azure-blobstore
+  source:
+    storage_account_name: ((installation.storage_account_name))
+    storage_account_key: ((installation.storage_account_key))
+    container: ((installation.container))
+    versioned_file: installation.zip
+
+- name: configuration
+  type: git
+  source:
+    private_key: ((configuration.private_key))
+    uri: ((configuration.uri))
+    branch: master
+
+- name: variable
+  type: git
+  source:
+    private_key: ((variable.private_key))
+    uri: ((variable.uri))
+    branch: master
+
+- name: one-time-trigger
+  type: time
+  source:
+    interval: 999999h
+
+- name: daily-trigger
+  type: time
+  source:
+    interval: 24h
+
+jobs:
+- name: install-opsman
+  serial: true
+  serial_groups: [ install ]
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        unpack: true
+        globs: ["*.tgz"]
+    - get: pcf-automation-tasks
+      params:
+        unpack: true
+        globs: ["*.zip"]
+    - get: opsman-image
+      params:
+        globs: [((opsman_image_wildcard))]
+
+    - get: configuration
+    - get: variable
+    - get: pipeline-utilities
+
+    - get: one-time-trigger
+      trigger: true
+    
+
+  - task: generate-opsman-config
+    file: configuration/tasks/generate-config/task.yml
+    params:
+      YAML:
+        opsman-configuration: ((opsman_configuration))
+      FILENAME: opsman.yml
+
+  - task: create-vm
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/create-vm.yml
+    input_mapping:
+      image: opsman-image
+      state: configuration
+    params:
+      STATE_FILE: ((foundation))/state/state.yml
+      OPSMAN_CONFIG_FILE: opsman.yml    # this is default value - but is the output generate-opsman-config task
+    ensure: &make-state-commit
+      do:
+        - task: make-commit-utilities
+          file: pipeline-utilities/tasks/commit-state-to-git.yml
+          input_mapping:
+            state: configuration
+            generated-state: generated-state
+          params:
+            GIT_COMMIT_USERNAME: "OpsmanBot"
+            GIT_COMMIT_EMAIL: "aelmore@pivotal.io"
+            GIT_COMMIT_MESSAGE: "Updated the state file from utilities"
+            STATE_FILE: ((foundation))/state/state.yml
+        - put: configuration
+          params:
+            repository: git-committed-state
+            rebase: true
+  - task: generate-env
+    file: configuration/tasks/generate-env/task.yml
+    params:
+      YAML: ((opsman_env))
+      FILENAME: env.yml
+
+  - task: generate-auth
+    file: pipeline-utilities/tasks/create-auth-file.yml
+    params:
+      OPSMAN_USERNAME: ((opsman_env.username))
+      OPSMAN_PASSWORD: ((opsman_env.password))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_env.decryption-passphrase))
+  
+  - task: configure-authentication
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/configure-authentication.yml
+    attempts: 10
+    params:
+      ENV_FILE: env.yml
+      AUTH_CONFIG_FILE: auth.yml
+
+  - task: env_to_yml
+    file: pipeline-utilities/tasks/create-product-secrets.yml
+    params:
+        PRODUCT_iaas-configuration_client_id: ((azure_client_id))
+        PRODUCT_iaas-configuration_ssh_public_key: ((director_ssh_key.public_key))
+        PRODUCT_iaas-configuration_subscription_id: ((azure_subscription_id))
+        PRODUCT_iaas-configuration_tenant_id: ((azure_tenant_id))
+        PRODUCT_iaas-configuration_ssh_private_key: ((director_ssh_key.private_key))
+        PRODUCT_iaas-configuration_client_secret: ((azure_client_secret))
+    
+  - task: configure-director
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/configure-director.yml
+    input_mapping:
+      config: configuration
+      env: env
+      vars: variable
+      secrets: secrets
+    params:
+      VARS_FILES: |
+        vars/((foundation))/config/director-vars.yml
+        secrets/product.yml
+      ENV_FILE: env.yml
+      DIRECTOR_CONFIG_FILE: ((foundation))/config/director.yml
+
+  - task: apply-director-changes
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/apply-director-changes.yml
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
+
+- name: export-installation
+  serial: true
+  plan:
+  - aggregate:
+    - get: daily-trigger
+      trigger: true
+    - get: pcf-automation-image
+      params:
+        unpack: true
+        globs: ["*.tgz"]
+    - get: pcf-automation-tasks
+      params:
+        unpack: true
+        globs: ["*.zip"]
+    - get: configuration
+    - get: variable
+  - task: generate-env
+    file: configuration/tasks/generate-env/task.yml
+    params:
+      YAML: ((opsman_env))
+      FILENAME: env.yml
+  - task: export-installation
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/export-installation.yml
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
+  - put: installation
+    params:
+      file: installation/installation.zip 
+
+- name: upgrade-opsman
+  serial: true
+  serial_groups: [ install ]
+  plan:
+  - aggregate:
+    - get: one-time-trigger
+      passed: [ install-opsman ]
+    - get: pcf-automation-image
+      params:
+        unpack: true
+        globs: ["*.tgz"]
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        unpack: true
+        globs: ["*.zip"]
+    - get: opsman-image
+    - get: installation
+      passed: [ export-installation ]
+    - get: configuration
+    - get: variable
+    # Unused???
+    - get: pipeline-utilities
+
+  - task: generate-opsman-config
+    file: configuration/tasks/generate-config/task.yml
+    params:
+      YAML:
+        opsman-configuration: ((opsman_configuration))
+      FILENAME: opsman.yml
+
+  - task: generate-env
+    file: configuration/tasks/generate-env/task.yml
+    params:
+      YAML: ((opsman_env))
+      FILENAME: env.yml
+
+  - task: upgrade-opsman
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/upgrade-opsman.yml
+    input_mapping:
+      image: opsman-image
+      state: configuration
+      config: configuration
+      env: env
+      vars: variable
+      installation: installation  # Do we need this here or does the get make it available? Asking because not in reference pipeline
+    params:
+      ENV_FILE: env.yml
+      OPSMAN_CONFIG_FILE: opsman.yml
+      STATE_FILE: ((foundation))/state/state.yml
+      INSTALLATION_FILE: installation.zip  # This is the default - only here for clarity - this is for director only
+    ensure: *make-state-commit
+
+  - task: apply-director-changes
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/apply-director-changes.yml
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
+
+# - name: apply-product-changes
+#   serial: true
+#   plan:
+#   - aggregate:
+#     - get: pcf-automation-image
+#       params:
+#         unpack: true
+#         globs: ["*.tgz"]
+#       trigger: true
+#     - get: pcf-automation-tasks
+#       params:
+#         unpack: true
+#         globs: ["*.zip"]
+#     - get: configuration
+#     - get: variable
+
+#   - task: generate-env
+#     file: configuration/tasks/generate-env/task.yml
+#     params:
+#       YAML: ((opsman_env))
+#       FILENAME: env.yml
+
+#   - task: apply-product-changes
+#     image: pcf-automation-image
+#     file: pcf-automation-tasks/tasks/apply-changes.yml
+#     input_mapping:
+#       env: env
+#     params:
+#       ENV_FILE: env.yml

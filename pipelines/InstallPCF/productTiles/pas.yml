@@ -1,0 +1,15 @@
+product_name: elastic-runtime
+product_location: tilegen/cf/2.2.10
+product_version: "^2\\.2\\.[0-9]+$"
+product_glob: "cf*.pivotal"
+product_stemcell_slug: "stemcells"
+# stemcell-version: "^3451\..*$"
+product_stemcell_version: "3586.57"
+product_secrets:
+  PRODUCT_networking_poe_ssl_certs_0/certificate: ((networking_cert.certificate))
+  PRODUCT_networking_poe_ssl_certs_0/privatekey: ((networking_cert.private_key))
+  PRODUCT_networking_poe_ssl_certs_0/name: Certificate_1
+  PRODUCT_uaa/service_provider_key_credentials/certificate: ((uaa_cert.certificate))
+  PRODUCT_uaa/service_provider_key_credentials/privatekey: ((uaa_cert.private_key))
+  PRODUCT_cloud_controller/apps_domain: apps.((env-name)).my3votes.com
+  PRODUCT_cloud_controller/system_domain: sys.((env-name)).my3votes.com
