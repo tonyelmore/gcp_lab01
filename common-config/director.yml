@@ -1,0 +1,80 @@
+director-configuration:
+  blobstore_type: local
+  bosh_recreate_on_next_deploy: false
+  database_type: internal
+  director_worker_count: 5
+  disable_dns_release: false
+  encryption:
+    keys: []
+    providers: []
+  excluded_recursors: []
+  hm_emailer_options:
+    enabled: false
+  hm_pager_duty_options:
+    enabled: false
+  keep_unreachable_vms: false
+  ntp_servers_string: ((ntp_servers))
+  post_deploy_enabled: false
+  resurrector_enabled: true
+  retry_bosh_deploys: true
+iaas-configuration:
+  project: ((gcp_project))
+  default_deployment_tag: ((deployment_tag))
+network-assignment:
+  network:
+    name: infrastructure
+  singleton_availability_zone:
+    name: ((az1))
+networks-configuration:
+  icmp_checks_enabled: false
+  networks:
+  - name: infrastructure
+    subnets:
+    - iaas_identifier: ((gcp_infra_network.identifier))
+      cidr: ((gcp_infra_network.cidr))
+      dns: ((gcp_dns))
+      gateway: ((gcp_infra_network.gateway))
+      reserved_ip_ranges: ((gcp_infra_network.reserved_ip_ranges))
+      availability_zone_names: &1
+      - ((az1))
+      - ((az2))
+      - ((az3))
+  - name: pas
+    subnets:
+    - iaas_identifier: ((gcp_pas_network.identifier))
+      cidr: ((gcp_pas_network.cidr))
+      dns: ((gcp_dns))
+      gateway: ((gcp_pas_network.gateway))
+      reserved_ip_ranges: ((gcp_pas_network.reserved_ip_ranges))
+      availability_zone_names: *1
+  - name: services
+    subnets:
+    - iaas_identifier: ((gcp_services_network.identifier))
+      cidr: ((gcp_services_network.cidr))
+      dns: ((gcp_dns))
+      gateway: ((gcp_services_network.gateway))
+      reserved_ip_ranges: ((gcp_services_network.reserved_ip_ranges))
+      availability_zone_names: *1
+resource-configuration:
+  compilation:
+    instances: automatic
+    instance_type:
+      id: automatic
+    internet_connected: true
+  director:
+    instances: automatic
+    persistent_disk:
+      size_mb: automatic
+    instance_type:
+      id: automatic
+    internet_connected: true
+security-configuration:
+  trusted_certificates:
+  generate_vm_passwords: true
+syslog-configuration:
+  enabled: false
+az-configuration:
+- name: ((az1))
+- name: ((az2))
+- name: ((az3))
+

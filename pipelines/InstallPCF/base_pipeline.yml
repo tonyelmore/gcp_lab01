@@ -5,11 +5,10 @@ resource_types:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
-# Need to replace this with GCP blobstore
-- name: azure-blobstore
+- name: gcs-resource
   type: docker-image
   source:
-    repository: pcfabr/azure-blobstore-resource
+    repository: frodenas/gcs-resource
 
 resources:
 - name: pcf-automation-tasks
@@ -39,11 +38,10 @@ resources:
     uri: https://github.com/pivotalservices/pipeline-utilities.git
 
 - name: installation
-  type: azure-blobstore
+  type: gcs-resource
   source:
-    storage_account_name: ((installation.storage_account_name))
-    storage_account_key: ((installation.storage_account_key))
-    container: ((installation.container))
+    bucket: ((installation.bucket))
+    json_key: ((installation.storage_account_key))
     versioned_file: installation.zip
 
 - name: configuration
@@ -95,7 +93,6 @@ jobs:
     - get: one-time-trigger
       trigger: true
     
-
   - task: generate-opsman-config
     file: configuration/tasks/generate-config/task.yml
     params:
@@ -152,12 +149,7 @@ jobs:
   - task: env_to_yml
     file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-        PRODUCT_iaas-configuration_client_id: ((azure_client_id))
-        PRODUCT_iaas-configuration_ssh_public_key: ((director_ssh_key.public_key))
-        PRODUCT_iaas-configuration_subscription_id: ((azure_subscription_id))
-        PRODUCT_iaas-configuration_tenant_id: ((azure_tenant_id))
-        PRODUCT_iaas-configuration_ssh_private_key: ((director_ssh_key.private_key))
-        PRODUCT_iaas-configuration_client_secret: ((azure_client_secret))
+        PRODUCT_iaas-configuration_auth_json: ((opsman_service_account_json))
     
   - task: configure-director
     image: pcf-automation-image
@@ -172,7 +164,7 @@ jobs:
         vars/((foundation))/config/director-vars.yml
         secrets/product.yml
       ENV_FILE: env.yml
-      DIRECTOR_CONFIG_FILE: ((foundation))/config/director.yml
+      DIRECTOR_CONFIG_FILE: common-config/director.yml
 
   - task: apply-director-changes
     image: pcf-automation-image
@@ -236,7 +228,7 @@ jobs:
     - get: configuration
     - get: variable
     # Unused???
-    - get: pipeline-utilities
+    # - get: pipeline-utilities
 
   - task: generate-opsman-config
     file: configuration/tasks/generate-config/task.yml

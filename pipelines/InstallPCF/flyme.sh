@@ -1,6 +1,6 @@
 fly -t mgmtplane \
 	set-pipeline \
 	-p gcplab01 \
-	-c pipeline_final.yml \
+	-c base_pipeline.yml \
 	-l pcf-pipeline-params.yml \
-	-l ../../lab02/config/opsman-params.yml
+	-l ../../lab01/config/opsman-params.yml

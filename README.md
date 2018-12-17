@@ -18,3 +18,7 @@ Here is a list of steps that I performed... with no explanation of what the step
 You will create several new configuration files to lay down the control plane and also to terraform up the environment.  There are secrets in these files.  However, the files are within the directory structure of cloned repos.  Good news is that the repo has a `.gitignore` that will ignore the new files.  Bad news is... these have to be kept around somewhere?
 
 So the question becomes "where?".  Should a new jumpbox be created where all this work is executed from?
+
+Questions:
+
+* Find again how to get the service account key from gcp
