@@ -114,7 +114,7 @@ jobs:
       config: configuration
       vars: variable
     params:
-      VARS_FILE: |
+      VARS_FILES: |
         {{opsman_vars_files}}
         secrets/product.yml
       OPSMAN_CONFIG_FILE: common-config/opsman.yml

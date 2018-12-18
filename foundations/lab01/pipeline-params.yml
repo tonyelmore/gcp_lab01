@@ -11,6 +11,7 @@ director_vars_files: |
   vars/foundations/lab01/director-vars.yml
   secrets/product.yml
 
+foundation: lab01
 pivnet_token: ((pivnet_token))
 pcf_automation_version: 1.0.0-beta.1
 opsman_version: ^2\.3\.[0-9]+$
