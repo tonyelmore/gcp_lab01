@@ -1,4 +1,4 @@
-opsman_configuration:
+opsman-configuration:
   gcp:
     gcp_service_account: ((opsman_service_account_json))
     project: ((project_id))
