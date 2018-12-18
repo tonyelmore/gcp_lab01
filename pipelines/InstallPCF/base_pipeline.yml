@@ -112,9 +112,10 @@ jobs:
     input_mapping:
       image: opsman-image
       config: configuration
-      vars: variable
     params:
-      VARS_FILES: {{opsman_vars_files}}
+      VARS_FILES: |
+        {{opsman_vars_files}}
+        secrets/product.yml
       OPSMAN_CONFIG_FILE: common-config/opsman.yml
     ensure: &make-state-commit
       put: state
