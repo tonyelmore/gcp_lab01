@@ -235,7 +235,7 @@ jobs:
 #     file: configuration/tasks/generate-config/task.yml
 #     params:
 #       YAML:
-#         opsman-configuration: ((opsman_configuration))
+#         opsman-configuration: ((opsman-configuration))
 #       FILENAME: opsman.yml
 
 #   - task: generate-env
