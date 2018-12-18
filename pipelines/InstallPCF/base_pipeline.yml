@@ -104,7 +104,7 @@ jobs:
   - task: create-opsman-secrets
     file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-      PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
+      PRODUCT_opsman_service_account_json: ((opsman_service_account_txt))
 
   - task: create-vm
     image: pcf-automation-image
