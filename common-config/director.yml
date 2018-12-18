@@ -77,4 +77,3 @@ az-configuration:
 - name: ((az1))
 - name: ((az2))
 - name: ((az3))
-
