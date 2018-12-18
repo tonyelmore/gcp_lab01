@@ -44,6 +44,13 @@ resources:
     json_key: ((installation.storage_account_key))
     versioned_file: installation.zip
 
+- name: state
+  type: gcs-resource
+  source:
+    bucket: ((state.bucket))
+    json_key: ((state.storage_account_key))
+    versioned_file: state.yml
+
 - name: configuration
   type: git
   source:
@@ -88,17 +95,16 @@ jobs:
 
     - get: configuration
     - get: variable
+    - get: state
     - get: pipeline-utilities
 
     - get: one-time-trigger
       trigger: true
-    
-  - task: generate-opsman-config
-    file: configuration/tasks/generate-config/task.yml
+
+  - task: create-opsman-secrets
+    file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-      YAML:
-        opsman-configuration: ((opsman_configuration))
-      FILENAME: opsman.yml
+      PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
 
   - task: create-vm
     image: pcf-automation-image
@@ -107,36 +113,30 @@ jobs:
       image: opsman-image
       state: configuration
     params:
-      STATE_FILE: ((foundation))/state/state.yml
-      OPSMAN_CONFIG_FILE: opsman.yml    # this is default value - but is the output generate-opsman-config task
+      VARS_FILE: {{opsman_vars_files}}
+      OPSMAN_CONFIG_FILE: common-config/opsman.yml
     ensure: &make-state-commit
-      do:
-        - task: make-commit-utilities
-          file: pipeline-utilities/tasks/commit-state-to-git.yml
-          input_mapping:
-            state: configuration
-            generated-state: generated-state
-          params:
-            GIT_COMMIT_USERNAME: "OpsmanBot"
-            GIT_COMMIT_EMAIL: "aelmore@pivotal.io"
-            GIT_COMMIT_MESSAGE: "Updated the state file from utilities"
-            STATE_FILE: ((foundation))/state/state.yml
-        - put: configuration
-          params:
-            repository: git-committed-state
-            rebase: true
-  - task: generate-env
-    file: configuration/tasks/generate-env/task.yml
+      put: state
+      params: { file: generated-state/state.yml }
+
+  - task: create-env-file
+    file: pipeline-utilities/tasks/create-env-file.yml
     params:
-      YAML: ((opsman_env))
-      FILENAME: env.yml
+      OPSMAN_TARGET: {{opsman_target}}
+      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
+      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
+      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
 
   - task: generate-auth
     file: pipeline-utilities/tasks/create-auth-file.yml
     params:
-      OPSMAN_USERNAME: ((opsman_env.username))
-      OPSMAN_PASSWORD: ((opsman_env.password))
+      OPSMAN_USERNAME: ((opsman_user.username))
+      OPSMAN_PASSWORD: ((opsman_user.password))
       OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_env.decryption-passphrase))
+      OUTPUT_FILE_NAME: auth.yml
   
   - task: configure-authentication
     image: pcf-automation-image
@@ -206,67 +206,67 @@ jobs:
     params:
       file: installation/installation.zip 
 
-- name: upgrade-opsman
-  serial: true
-  serial_groups: [ install ]
-  plan:
-  - aggregate:
-    - get: one-time-trigger
-      passed: [ install-opsman ]
-    - get: pcf-automation-image
-      params:
-        unpack: true
-        globs: ["*.tgz"]
-      trigger: true
-    - get: pcf-automation-tasks
-      params:
-        unpack: true
-        globs: ["*.zip"]
-    - get: opsman-image
-    - get: installation
-      passed: [ export-installation ]
-    - get: configuration
-    - get: variable
-    # Unused???
-    # - get: pipeline-utilities
+# - name: upgrade-opsman
+#   serial: true
+#   serial_groups: [ install ]
+#   plan:
+#   - aggregate:
+#     - get: one-time-trigger
+#       passed: [ install-opsman ]
+#     - get: pcf-automation-image
+#       params:
+#         unpack: true
+#         globs: ["*.tgz"]
+#       trigger: true
+#     - get: pcf-automation-tasks
+#       params:
+#         unpack: true
+#         globs: ["*.zip"]
+#     - get: opsman-image
+#     - get: installation
+#       passed: [ export-installation ]
+#     - get: configuration
+#     - get: variable
+#     # Unused???
+#     # - get: pipeline-utilities
 
-  - task: generate-opsman-config
-    file: configuration/tasks/generate-config/task.yml
-    params:
-      YAML:
-        opsman-configuration: ((opsman_configuration))
-      FILENAME: opsman.yml
+#   - task: generate-opsman-config
+#     file: configuration/tasks/generate-config/task.yml
+#     params:
+#       YAML:
+#         opsman-configuration: ((opsman_configuration))
+#       FILENAME: opsman.yml
 
-  - task: generate-env
-    file: configuration/tasks/generate-env/task.yml
-    params:
-      YAML: ((opsman_env))
-      FILENAME: env.yml
+#   - task: generate-env
+#     file: configuration/tasks/generate-env/task.yml
+#     params:
+#       YAML: ((opsman_env))
+#       FILENAME: env.yml
 
-  - task: upgrade-opsman
-    image: pcf-automation-image
-    file: pcf-automation-tasks/tasks/upgrade-opsman.yml
-    input_mapping:
-      image: opsman-image
-      state: configuration
-      config: configuration
-      env: env
-      vars: variable
-      installation: installation  # Do we need this here or does the get make it available? Asking because not in reference pipeline
-    params:
-      ENV_FILE: env.yml
-      OPSMAN_CONFIG_FILE: opsman.yml
-      STATE_FILE: ((foundation))/state/state.yml
-      INSTALLATION_FILE: installation.zip  # This is the default - only here for clarity - this is for director only
-    ensure: *make-state-commit
+#   - task: upgrade-opsman
+#     image: pcf-automation-image
+#     file: pcf-automation-tasks/tasks/upgrade-opsman.yml
+#     input_mapping:
+#       image: opsman-image
+#       state: configuration
+#       config: configuration
+#       env: env
+#       vars: variable
+#       installation: installation  # Do we need this here or does the get make it available? Asking because not in reference pipeline
+#     params:
+#       ENV_FILE: env.yml
+#       OPSMAN_CONFIG_FILE: opsman.yml
+#       STATE_FILE: ((foundation))/state/state.yml
+#       INSTALLATION_FILE: installation.zip  # This is the default - only here for clarity - this is for director only
+#     ensure: *make-state-commit
 
-  - task: apply-director-changes
-    image: pcf-automation-image
-    file: pcf-automation-tasks/tasks/apply-director-changes.yml
-    input_mapping:
-      env: env
-    params:
-      ENV_FILE: env.yml
+#   - task: apply-director-changes
+#     image: pcf-automation-image
+#     file: pcf-automation-tasks/tasks/apply-director-changes.yml
+#     input_mapping:
+#       env: env
+#     params:
+#       ENV_FILE: env.yml
 
 # - name: apply-product-changes
 #   serial: true
