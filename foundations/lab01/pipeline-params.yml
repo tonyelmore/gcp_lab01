@@ -6,7 +6,6 @@ opsman_request_timeout: 1800
 
 opsman_vars_files: |
   vars/foundations/lab01/opsman-vars.yml
-  secrets/product.yml
 
 director_vars_files: |
   vars/foundations/lab01/director-vars.yml

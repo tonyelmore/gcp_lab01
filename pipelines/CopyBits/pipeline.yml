@@ -1,0 +1,77 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+- name: gcs-resource
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+
+resources:
+- name: platform-automation-pivnet
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: platform-automation
+    product_version: ((pcf_automation_version))
+
+- name: platform-automation-tasks-s3
+  type: gcs-resource
+  source:
+    bucket: ((config_bucket))
+    json_key: ((config_storage_account_key))
+    regexp: tasks-(.*).zip
+
+- name: statefile
+  type: gcs-resource
+  source:
+    bucket: ((config_bucket))
+    json_key: ((config_storage_account_key))
+    versioned_file: state.yml
+
+jobs:
+- name: get-platform-automation
+  plan:
+  - aggregate:
+    - get: platform-automation-pivnet
+      trigger: true
+  - aggregate:
+    - put: platform-automation-tasks-s3
+      params:
+        file: platform-automation-pivnet/*tasks-*.zip
+
+- name: show-s3-resource
+  plan:
+  - get: statefile
+  - task: show-statefile
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+      inputs:
+        - name: statefile
+      run:
+        path: sh
+        args: [-c, 'echo Contents of statefile...; cat statefile/state.yml']
+
+# - name: update-s3-resource
+#   plan:
+#   - get: statefile
+#   - put: statefile
+#     params:
+#       file: state.yml
+#   - task: update-statefile
+#     config:
+#       platform: linux
+#       image_resource:
+#         type: docker-image
+#         source: {repository: busybox}
+#       run:
+#         path: sh
+#         args: [-c, 'echo Contents of statefile...; cat $statefile; echo $(date) > $statefile']
+#     params: 
+#       statefile: ((statefile))

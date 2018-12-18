@@ -113,7 +113,9 @@ jobs:
       image: opsman-image
       state: configuration
     params:
-      VARS_FILE: {{opsman_vars_files}}
+      VARS_FILE: |
+        {{opsman_vars_files}}
+        secrets/product.yml
       OPSMAN_CONFIG_FILE: common-config/opsman.yml
     ensure: &make-state-commit
       put: state
@@ -149,7 +151,7 @@ jobs:
   - task: env_to_yml
     file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-        PRODUCT_iaas-configuration_auth_json: ((opsman_service_account_json))
+      PRODUCT_iaas-configuration_auth_json: ((opsman_service_account_json))
     
   - task: configure-director
     image: pcf-automation-image
