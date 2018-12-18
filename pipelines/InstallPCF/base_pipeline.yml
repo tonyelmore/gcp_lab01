@@ -138,7 +138,7 @@ jobs:
     params:
       OPSMAN_USERNAME: ((opsman_user.username))
       OPSMAN_PASSWORD: ((opsman_user.password))
-      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption-passphrase))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
       OUTPUT_FILE_NAME: auth.yml
   
   - task: configure-authentication
