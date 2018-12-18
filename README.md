@@ -19,6 +19,14 @@ You will create several new configuration files to lay down the control plane an
 
 So the question becomes "where?".  Should a new jumpbox be created where all this work is executed from?
 
-Questions:
+### Questions
 
 * Find again how to get the service account key from gcp
+
+### Blobstore
+
+To use GCP blobstore for holding installation.zip or state.yml - the bucket must be enabled for versioning
+
+https://cloud.google.com/storage/docs/using-object-versioning#enable
+
+gsutil versioning set on gs://[BUCKET_NAME]
