@@ -1,6 +1,6 @@
 opsman_configuration:
   gcp:
-    gcp_service_account: ((opsman_service_account_json))
+    gcp_service_account: ((opsman_service_account_txt))
     project: ((project_id))
     region: ((region))
     zone: ((zone))
