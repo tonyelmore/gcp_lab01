@@ -112,6 +112,7 @@ jobs:
     input_mapping:
       image: opsman-image
       config: configuration
+      vars: variable
     params:
       VARS_FILES: |
         {{opsman_vars_files}}
