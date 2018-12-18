@@ -111,7 +111,8 @@ jobs:
     file: pcf-automation-tasks/tasks/create-vm.yml
     input_mapping:
       image: opsman-image
-      state: configuration
+      config: configuration
+      vars: variable
     params:
       VARS_FILE: |
         {{opsman_vars_files}}
