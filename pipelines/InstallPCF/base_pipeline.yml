@@ -40,29 +40,29 @@ resources:
 - name: installation
   type: gcs-resource
   source:
-    bucket: ((installation.bucket))
-    json_key: ((installation.storage_account_key))
+    bucket: ((config_bucket))
+    json_key: ((config_storage_account_key))
     versioned_file: installation.zip
 
 - name: state
   type: gcs-resource
   source:
-    bucket: ((state.bucket))
-    json_key: ((state.storage_account_key))
+    bucket: ((config_bucket))
+    json_key: ((config_storage_account_key))
     versioned_file: state.yml
 
 - name: configuration
   type: git
   source:
-    private_key: ((configuration.private_key))
-    uri: ((configuration.uri))
+    private_key: ((configuration_private_key))
+    uri: ((configuration_uri))
     branch: master
 
 - name: variable
   type: git
   source:
-    private_key: ((variable.private_key))
-    uri: ((variable.uri))
+    private_key: ((variable_private_key))
+    uri: ((variable_uri))
     branch: master
 
 - name: one-time-trigger
