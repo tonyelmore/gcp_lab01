@@ -104,7 +104,7 @@ jobs:
   - task: create-opsman-secrets
     file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-      PRODUCT_opsman_service_account_json: ((opsman_service_account_txt))
+      PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
 
   - task: create-vm
     image: pcf-automation-image
@@ -115,7 +115,7 @@ jobs:
       vars: variable
     params:
       VARS_FILES: |
-        vars/foundations/{{foundation}}/opsman-vars.yml
+        vars/foundations/((foundation))/opsman-vars.yml
         secrets/product.yml
       OPSMAN_CONFIG_FILE: common-config/opsman.yml
     ensure: &make-state-commit
