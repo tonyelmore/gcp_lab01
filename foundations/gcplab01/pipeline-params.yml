@@ -4,13 +4,6 @@ opsman_admin_username: admin
 opsman_connect_timeout: 30
 opsman_request_timeout: 1800
 
-opsman_vars_files: |
-  vars/foundations/gcplab01/opsman-vars.yml
-
-director_vars_files: |
-  vars/foundations/gcplab01/director-vars.yml
-  secrets/product.yml
-
 foundation: gcplab01
 pivnet_token: ((pivnet_token))
 pcf_automation_version: 1.0.0-beta.1
