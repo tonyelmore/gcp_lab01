@@ -2,4 +2,4 @@ pivnet_token: ((pivnet_token))
 pcf_automation_version: 0.0.1-rc.229
 
 config_storage_account_key: ((opsman_service_account_json))
-config_bucket: sa-aelmore-gcplab01-pipeline-storage
+config_bucket: sa-aelmore-lab01-pipeline-storage

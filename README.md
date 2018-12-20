@@ -30,3 +30,6 @@ To use GCP blobstore for holding installation.zip or state.yml - the bucket must
 https://cloud.google.com/storage/docs/using-object-versioning#enable
 
 gsutil versioning set on gs://[BUCKET_NAME]
+
+### Setting JSON in credhub as a value
+credhub set -n /concourse/main/opsman_service_account_json -t value -v "$(cat sa-aelmore-dc48ffcab2d2.json)"
