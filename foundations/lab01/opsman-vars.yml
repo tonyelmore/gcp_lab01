@@ -2,6 +2,6 @@ project_id: sa-aelmore
 region: us-west1
 zone: us-west1-b
 infra_subnet: lab01-infrastructure-subnet
-public_ip: 35.197.52.16    # terraform output ops_manager_public_ip
+public_ip: 35.247.90.16    # terraform output ops_manager_public_ip
 private_ip: 10.0.0.2
 foundation: lab01  
