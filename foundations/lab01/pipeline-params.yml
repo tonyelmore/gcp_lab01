@@ -1,10 +1,10 @@
-opsman_target: https://pcf.gcplab01.differentscale.com
+opsman_target: https://pcf.lab01.differentscale.com
 opsman_skip_ssl_validation: true
 opsman_admin_username: admin
 opsman_connect_timeout: 30
 opsman_request_timeout: 1800
 
-foundation: gcplab01
+foundation: lab01
 pivnet_token: ((pivnet_token))
 pcf_automation_version: 1.0.0-beta.1
 opsman_version: ^2\.3\.[0-9]+$

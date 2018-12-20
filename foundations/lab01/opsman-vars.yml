@@ -1,7 +1,7 @@
 project_id: sa-aelmore
 region: us-west1
 zone: us-west1-b
-infra_subnet: gcplab01-infrastructure-subnet
+infra_subnet: lab01-infrastructure-subnet
 public_ip: 104.196.248.181    # terraform output ops_manager_public_ip
 private_ip: 10.0.0.2
-foundation: gcplab01  
+foundation: lab01  
