@@ -16,4 +16,4 @@ variable_uri: git@github.com:tonyelmore/gcp_lab01.git
 
 # Define blob store for installation exports and state.yml
 config_storage_account_key: ((opsman_service_account_json))
-config_bucket: sa-aelmore-gcplab01-pipeline-storage
+config_bucket: sa-aelmore-lab01-pipeline-storage
