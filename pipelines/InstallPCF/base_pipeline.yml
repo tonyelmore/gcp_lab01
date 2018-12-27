@@ -166,7 +166,6 @@ jobs:
       VARS_FILE: |
         vars/foundations/((foundation))/director-vars.yml
         secrets/product.yml
-      ENV_FILE: env.yml
       DIRECTOR_CONFIG_FILE: common-config/director.yml
 
   - task: apply-director-changes
