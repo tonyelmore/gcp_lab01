@@ -10,19 +10,19 @@ az2: us-west1-a
 az3: us-west1-c
 
 gcp_infra_network:
-  identifier: lab01-pcf-network/gclab01-infrastructure-subnet/us-west1
+  identifier: lab01-pcf-network/lab01-infrastructure-subnet/us-west1
   cidr: 10.0.0.0/26
   gateway: 10.0.0.1
   reserved_ip_ranges: 0.0.0.1-10.0.0.9
 
 gcp_pas_network:
-  identifier: lab01-pcf-network/gclab01-pas-subnet/us-west1
+  identifier: lab01-pcf-network/lab01-pas-subnet/us-west1
   cidr: 10.0.4.0/24
   gateway: 10.0.4.1
   reserved_ip_ranges: 10.0.4.1-10.0.4.9
 
 gcp_services_network:
-  identifier: lab01-pcf-network/gclab01-services-subnet/us-west1
+  identifier: lab01-pcf-network/lab01-services-subnet/us-west1
   cidr: 10.0.8.0/24
   gateway: 10.0.8.1
   reserved_ip_ranges: 10.0.8.1-10.0.8.9
