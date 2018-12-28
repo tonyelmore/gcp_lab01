@@ -20,6 +20,7 @@ director-configuration:
 iaas-configuration:
   project: ((gcp_project))
   default_deployment_tag: ((deployment_tag))
+  auth_json: ((opsman_service_account_json))
 network-assignment:
   network:
     name: infrastructure
