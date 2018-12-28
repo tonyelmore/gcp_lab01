@@ -152,7 +152,7 @@ jobs:
   - task: env_to_yml
     file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-      PRODUCT_iaas-configuration_auth_json: ((opsman_service_account_json))
+      PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
     
   - task: configure-director
     image: pcf-automation-image
