@@ -164,7 +164,7 @@ jobs:
       secrets: secrets
     params:
       VARS_FILES: |
-        vars/foundations/((foundation))/director-varsx.yml
+        vars/foundations/((foundation))/director-vars.yml
         secrets/product.yml
       DIRECTOR_CONFIG_FILE: common-config/director.yml
 
