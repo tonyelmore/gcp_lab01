@@ -2,3 +2,4 @@
 terraforming/
 control-plane/
 concourse-bosh-deployment/
+secrets/

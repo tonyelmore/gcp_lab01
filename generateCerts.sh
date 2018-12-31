@@ -1,8 +1,8 @@
 credhub generate -t certificate \
   -n /concourse/main/gcp-lab01-cert \
-  -c differentscale.com \
-  -a *.system.lab01.differentscale.com \
-  -a *.apps.lab01.differentscale.com \
-  -a *.login.system.lab01.differentscale.com \
-  -a *.uaa.system.lab01.differentscale.com \
+  -c telmore.io \
+  -a *.system.lab01.telmore.io \
+  -a *.apps.lab01.telmore.io \
+  -a *.login.system.lab01.telmore.io \
+  -a *.uaa.system.lab01.telmore.io \
   --self-sign
