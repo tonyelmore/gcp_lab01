@@ -192,6 +192,7 @@ jobs:
         globs: ["*.zip"]
     - get: configuration
     - get: variable
+    - get: pipeline-utilities
   - task: create-env-file
     file: pipeline-utilities/tasks/create-env-file.yml
     params:
