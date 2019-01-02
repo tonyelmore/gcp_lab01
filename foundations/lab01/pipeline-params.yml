@@ -25,4 +25,4 @@ opsman_env:
   skip-ssl-validation: true     # default false
   username: ((opsman_user.username))
   password: ((opsman_user.password))
-  decryption-passphrase: ((decryption_passphrase))
+  decryption-passphrase: ((opsman_decryption_passphrase))
