@@ -231,6 +231,8 @@ jobs:
         unpack: true
         globs: ["*.zip"]
     - get: opsman-image
+      params:
+        globs: [((opsman_image_wildcard))]
     - get: installation
       passed: [ export-installation ]
     - get: configuration

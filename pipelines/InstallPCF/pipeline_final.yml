@@ -122,6 +122,72 @@ jobs:
       file: installation/installation.zip
     put: installation
   serial: true
+- name: upgrade-opsman
+  plan:
+  - aggregate:
+    - get: one-time-trigger
+      passed:
+      - install-opsman
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: opsman-image
+      params:
+        globs:
+        - ((opsman_image_wildcard))
+    - get: installation
+      passed:
+      - export-installation
+    - get: configuration
+    - get: variable
+  - file: configuration/tasks/generate-config/task.yml
+    params:
+      FILENAME: opsman.yml
+      YAML:
+        opsman-configuration: ((opsman-configuration))
+    task: generate-opsman-config
+  - file: configuration/tasks/generate-env/task.yml
+    params:
+      FILENAME: env.yml
+      YAML: ((opsman_env))
+    task: generate-env
+  - ensure:
+      params:
+        file: generated-state/state.yml
+      put: state
+    file: pcf-automation-tasks/tasks/upgrade-opsman.yml
+    image: pcf-automation-image
+    input_mapping:
+      config: configuration
+      env: env
+      image: opsman-image
+      installation: installation
+      state: configuration
+      vars: variable
+    params:
+      ENV_FILE: env.yml
+      INSTALLATION_FILE: installation.zip
+      OPSMAN_CONFIG_FILE: opsman.yml
+      STATE_FILE: ((foundation))/state/state.yml
+    task: upgrade-opsman
+  - file: pcf-automation-tasks/tasks/apply-director-changes.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
+    task: apply-director-changes
+  serial: true
+  serial_groups:
+  - install
 - name: apply-product-changes
   plan:
   - aggregate:
