@@ -158,15 +158,8 @@
         trigger: true
         params:
           globs: ["*-azure*"]
-      - get: configuration
       - get: pipeline-utilities
     
-    # - task: generate-env
-    #   file: configuration/tasks/generate-env/task.yml
-    #   params:
-    #     YAML: ((opsman_env))
-    #     FILENAME: env.yml
-
     - task: create-env-file
       file: pipeline-utilities/tasks/create-env-file.yml
       params:

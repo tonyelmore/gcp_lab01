@@ -354,7 +354,6 @@ jobs:
         globs:
         - '*-azure*'
       trigger: true
-    - get: configuration
     - get: pipeline-utilities
   - file: pipeline-utilities/tasks/create-env-file.yml
     params:
