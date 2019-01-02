@@ -17,12 +17,3 @@ variable_uri: git@github.com:tonyelmore/gcp_lab01.git
 # Define blob store for installation exports and state.yml
 config_storage_account_key: ((opsman_service_account_json))
 config_bucket: sa-aelmore-lab01-pipeline-storage
-
-opsman_env:
-  target: https://pcf.lab01.telmore.io
-  connect-timeout: 30            # default 5
-  request-timeout: 1800          # default 1800
-  skip-ssl-validation: true     # default false
-  username: ((opsman_user.username))
-  password: ((opsman_user.password))
-  decryption-passphrase: ((opsman_decryption_passphrase))
