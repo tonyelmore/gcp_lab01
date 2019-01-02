@@ -1,0 +1,359 @@
+jobs:
+- name: install-opsman
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: opsman-image
+      params:
+        globs:
+        - ((opsman_image_wildcard))
+    - get: configuration
+    - get: variable
+    - get: state
+    - get: pipeline-utilities
+    - get: one-time-trigger
+      trigger: true
+  - file: pipeline-utilities/tasks/create-product-secrets.yml
+    params:
+      PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
+    task: create-opsman-secrets
+  - ensure:
+      params:
+        file: generated-state/state.yml
+      put: state
+    file: pcf-automation-tasks/tasks/create-vm.yml
+    image: pcf-automation-image
+    input_mapping:
+      config: configuration
+      image: opsman-image
+      vars: variable
+    params:
+      OPSMAN_CONFIG_FILE: common-config/opsman.yml
+      VARS_FILES: |
+        vars/foundations/((foundation))/opsman-vars.yml
+        secrets/product.yml
+    task: create-vm
+  - file: configuration/tasks/generate-env/task.yml
+    params:
+      FILENAME: env.yml
+      YAML: ((opsman_env))
+    task: generate-env
+  - file: pipeline-utilities/tasks/create-auth-file.yml
+    params:
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_USERNAME: ((opsman_user.username))
+      OUTPUT_FILE_NAME: auth.yml
+    task: generate-auth
+  - attempts: 10
+    file: pcf-automation-tasks/tasks/configure-authentication.yml
+    image: pcf-automation-image
+    params:
+      AUTH_CONFIG_FILE: auth.yml
+      ENV_FILE: env.yml
+    task: configure-authentication
+  - file: pipeline-utilities/tasks/create-product-secrets.yml
+    params:
+      PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
+    task: env_to_yml
+  - file: pcf-automation-tasks/tasks/configure-director.yml
+    image: pcf-automation-image
+    input_mapping:
+      config: configuration
+      env: env
+      secrets: secrets
+      vars: variable
+    params:
+      DIRECTOR_CONFIG_FILE: common-config/director.yml
+      VARS_FILES: |
+        vars/foundations/((foundation))/director-vars.yml
+        secrets/product.yml
+    task: configure-director
+  - file: pcf-automation-tasks/tasks/apply-director-changes.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
+    task: apply-director-changes
+  serial: true
+  serial_groups:
+  - install
+- name: export-installation
+  plan:
+  - aggregate:
+    - get: daily-trigger
+      trigger: true
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: configuration
+    - get: variable
+    - get: pipeline-utilities
+  - file: configuration/tasks/generate-env/task.yml
+    params:
+      FILENAME: env.yml
+      YAML: ((opsman_env))
+    task: generate-env
+  - file: pcf-automation-tasks/tasks/export-installation.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
+    task: export-installation
+  - params:
+      file: installation/installation.zip
+    put: installation
+  serial: true
+- name: apply-product-changes
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      passed:
+      - configure-cf
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: configuration
+    - get: variable
+    - get: pipeline-utilities
+  - file: configuration/tasks/generate-env/task.yml
+    params:
+      FILENAME: env.yml
+      YAML: ((opsman_env))
+    task: generate-env
+  - file: pcf-automation-tasks/tasks/apply-changes.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
+    task: apply-product-changes
+  serial: true
+- name: upload-and-stage-cf
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      passed:
+      - upgrade-opsman
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: cf-product
+      params:
+        globs:
+        - cf*.pivotal
+    - get: configuration
+    - get: variable
+  - file: configuration/tasks/generate-env/task.yml
+    params:
+      FILENAME: env.yml
+      YAML: ((opsman_env))
+    task: generate-env
+  - file: pcf-automation-tasks/tasks/upload-and-stage-product.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+      product: cf-product
+    params:
+      ENV_FILE: env.yml
+    task: upload-and-stage-product
+  serial: true
+- name: configure-cf
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      passed:
+      - upload-and-stage-cf
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: configuration
+    - get: variable
+    - get: pipeline-utilities
+  - file: configuration/tasks/generate-env/task.yml
+    params:
+      FILENAME: env.yml
+      YAML: ((opsman_env))
+    task: generate-env
+  - file: pipeline-utilities/tasks/create-product-secrets.yml
+    params:
+      PRODUCT_cloud_controller/apps_domain: apps.((env-name)).telmore.io
+      PRODUCT_cloud_controller/system_domain: sys.((env-name)).telmore.io
+      PRODUCT_networking_poe_ssl_certs_0/certificate: ((networking_cert.certificate))
+      PRODUCT_networking_poe_ssl_certs_0/name: Certificate_1
+      PRODUCT_networking_poe_ssl_certs_0/privatekey: ((networking_cert.private_key))
+      PRODUCT_uaa/service_provider_key_credentials/certificate: ((uaa_cert.certificate))
+      PRODUCT_uaa/service_provider_key_credentials/privatekey: ((uaa_cert.private_key))
+    task: extract-cf-secrets
+  - file: pcf-automation-tasks/tasks/configure-product.yml
+    image: pcf-automation-image
+    input_mapping:
+      config: configuration
+      env: env
+      secrets: secrets
+      vars: variable
+    params:
+      CONFIG_FILE: foundations/((foundation))/products/cf/cf.yml
+      ENV_FILE: env.yml
+      VARS_FILES: |
+        vars/tilegen/cf/2.2.10/product-default-vars.yml
+        vars/tilegen/cf/2.2.10/errand-vars.yml
+        vars/tilegen/cf/2.2.10/resource-vars.yml
+        vars/foundations/((foundation))/products/cf/cf-vars.yml
+        secrets/product.yml
+    task: configure-cf
+  serial: true
+- name: upload-stemcell-cf
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      passed:
+      - upgrade-opsman
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: cf-stemcell
+      params:
+        globs:
+        - '*-azure*'
+      trigger: true
+    - get: configuration
+    - get: pipeline-utilities
+  - file: configuration/tasks/generate-env/task.yml
+    params:
+      FILENAME: env.yml
+      YAML: ((opsman_env))
+    task: generate-env
+  - file: pcf-automation-tasks/tasks/upload-stemcell.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+      stemcell: cf-stemcell
+    params:
+      ENV_FILE: env.yml
+    task: upload-stemcell-cf
+  serial: true
+resource_types:
+- name: pivnet
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+  type: docker-image
+- name: gcs-resource
+  source:
+    repository: frodenas/gcs-resource
+  type: docker-image
+resources:
+- name: pcf-automation-tasks
+  source:
+    api_token: ((pivnet_token))
+    product_slug: platform-automation
+    product_version: ((pcf_automation_version))
+  type: pivnet
+- name: pcf-automation-image
+  source:
+    api_token: ((pivnet_token))
+    product_slug: platform-automation
+    product_version: ((pcf_automation_version))
+  type: pivnet
+- name: opsman-image
+  source:
+    api_token: ((pivnet_token))
+    product_slug: ops-manager
+    product_version: ((opsman_version))
+  type: pivnet
+- name: pipeline-utilities
+  source:
+    uri: https://github.com/pivotalservices/pipeline-utilities.git
+  type: git
+- name: installation
+  source:
+    bucket: ((config_bucket))
+    json_key: ((config_storage_account_key))
+    versioned_file: installation.zip
+  type: gcs-resource
+- name: state
+  source:
+    bucket: ((config_bucket))
+    json_key: ((config_storage_account_key))
+    versioned_file: state.yml
+  type: gcs-resource
+- name: configuration
+  source:
+    branch: master
+    private_key: ((configuration_private_key))
+    uri: ((configuration_uri))
+  type: git
+- name: variable
+  source:
+    branch: master
+    private_key: ((variable_private_key))
+    uri: ((variable_uri))
+  type: git
+- name: one-time-trigger
+  source:
+    interval: 999999h
+  type: time
+- name: daily-trigger
+  source:
+    interval: 24h
+  type: time
+- name: cf-product
+  source:
+    api_token: ((pivnet_token))
+    product_slug: cf
+    product_version: ^2\.2\.[0-9]+$
+    sort_by: semver
+  type: pivnet
+- name: cf-stemcell
+  source:
+    api_token: ((pivnet_token))
+    product_slug: stemcells
+    product_version: "3586.57"
+  type: pivnet

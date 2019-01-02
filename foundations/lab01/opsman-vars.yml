@@ -4,4 +4,13 @@ zone: us-west1-b
 infra_subnet: lab01-infrastructure-subnet
 public_ip: 35.247.108.145    # terraform output ops_manager_public_ip
 private_ip: 10.0.0.2
-foundation: lab01  
+foundation: lab01
+
+opsman_env:
+  target: https://pcf.lab01.telmore.io
+  connect-timeout: 30            # default 5
+  request-timeout: 1800          # default 1800
+  skip-ssl-validation: true     # default false
+  username: ((opsman_user.username))
+  password: ((opsman_user.password))
+  decryption-passphrase: ((decryption_passphrase))

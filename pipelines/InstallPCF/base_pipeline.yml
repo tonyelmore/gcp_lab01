@@ -122,16 +122,21 @@ jobs:
       put: state
       params: { file: generated-state/state.yml }
 
-  - task: create-env-file
-    file: pipeline-utilities/tasks/create-env-file.yml
+  # - task: create-env-file
+  #   file: pipeline-utilities/tasks/create-env-file.yml
+  #   params:
+  #     OPSMAN_TARGET: {{opsman_target}}
+  #     OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
+  #     OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
+  #     OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
+  #     OPSMAN_USERNAME: ((opsman_user.username))
+  #     OPSMAN_PASSWORD: ((opsman_user.password))
+  #     OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+  - task: generate-env
+    file: configuration/tasks/generate-env/task.yml
     params:
-      OPSMAN_TARGET: {{opsman_target}}
-      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
-      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
-      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
-      OPSMAN_USERNAME: ((opsman_user.username))
-      OPSMAN_PASSWORD: ((opsman_user.password))
-      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      YAML: ((opsman_env))
+      FILENAME: env.yml
 
   - task: generate-auth
     file: pipeline-utilities/tasks/create-auth-file.yml
@@ -193,16 +198,11 @@ jobs:
     - get: configuration
     - get: variable
     - get: pipeline-utilities
-  - task: create-env-file
-    file: pipeline-utilities/tasks/create-env-file.yml
+  - task: generate-env
+    file: configuration/tasks/generate-env/task.yml
     params:
-      OPSMAN_TARGET: {{opsman_target}}
-      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
-      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
-      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
-      OPSMAN_USERNAME: ((opsman_user.username))
-      OPSMAN_PASSWORD: ((opsman_user.password))
-      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      YAML: ((opsman_env))
+      FILENAME: env.yml
   - task: export-installation
     image: pcf-automation-image
     file: pcf-automation-tasks/tasks/export-installation.yml
@@ -214,67 +214,67 @@ jobs:
     params:
       file: installation/installation.zip 
 
-# - name: upgrade-opsman
-#   serial: true
-#   serial_groups: [ install ]
-#   plan:
-#   - aggregate:
-#     - get: one-time-trigger
-#       passed: [ install-opsman ]
-#     - get: pcf-automation-image
-#       params:
-#         unpack: true
-#         globs: ["*.tgz"]
-#       trigger: true
-#     - get: pcf-automation-tasks
-#       params:
-#         unpack: true
-#         globs: ["*.zip"]
-#     - get: opsman-image
-#     - get: installation
-#       passed: [ export-installation ]
-#     - get: configuration
-#     - get: variable
-#     # Unused???
-#     # - get: pipeline-utilities
+- name: upgrade-opsman
+  serial: true
+  serial_groups: [ install ]
+  plan:
+  - aggregate:
+    - get: one-time-trigger
+      passed: [ install-opsman ]
+    - get: pcf-automation-image
+      params:
+        unpack: true
+        globs: ["*.tgz"]
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        unpack: true
+        globs: ["*.zip"]
+    - get: opsman-image
+    - get: installation
+      passed: [ export-installation ]
+    - get: configuration
+    - get: variable
+    # Unused???
+    # - get: pipeline-utilities
 
-#   - task: generate-opsman-config
-#     file: configuration/tasks/generate-config/task.yml
-#     params:
-#       YAML:
-#         opsman-configuration: ((opsman-configuration))
-#       FILENAME: opsman.yml
+  - task: generate-opsman-config
+    file: configuration/tasks/generate-config/task.yml
+    params:
+      YAML:
+        opsman-configuration: ((opsman-configuration))
+      FILENAME: opsman.yml
 
-#   - task: generate-env
-#     file: configuration/tasks/generate-env/task.yml
-#     params:
-#       YAML: ((opsman_env))
-#       FILENAME: env.yml
+  - task: generate-env
+    file: configuration/tasks/generate-env/task.yml
+    params:
+      YAML: ((opsman_env))
+      FILENAME: env.yml
 
-#   - task: upgrade-opsman
-#     image: pcf-automation-image
-#     file: pcf-automation-tasks/tasks/upgrade-opsman.yml
-#     input_mapping:
-#       image: opsman-image
-#       state: configuration
-#       config: configuration
-#       env: env
-#       vars: variable
-#       installation: installation  # Do we need this here or does the get make it available? Asking because not in reference pipeline
-#     params:
-#       ENV_FILE: env.yml
-#       OPSMAN_CONFIG_FILE: opsman.yml
-#       STATE_FILE: ((foundation))/state/state.yml
-#       INSTALLATION_FILE: installation.zip  # This is the default - only here for clarity - this is for director only
-#     ensure: *make-state-commit
+  - task: upgrade-opsman
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/upgrade-opsman.yml
+    input_mapping:
+      image: opsman-image
+      state: configuration
+      config: configuration
+      env: env
+      vars: variable
+      installation: installation  # Do we need this here or does the get make it available? Asking because not in reference pipeline
+    params:
+      ENV_FILE: env.yml
+      OPSMAN_CONFIG_FILE: opsman.yml
+      STATE_FILE: ((foundation))/state/state.yml
+      INSTALLATION_FILE: installation.zip  # This is the default - only here for clarity - this is for director only
+    ensure: *make-state-commit
 
-#   - task: apply-director-changes
-#     image: pcf-automation-image
-#     file: pcf-automation-tasks/tasks/apply-director-changes.yml
-#     input_mapping:
-#       env: env
-#     params:
-#       ENV_FILE: env.yml
+  - task: apply-director-changes
+    image: pcf-automation-image
+    file: pcf-automation-tasks/tasks/apply-director-changes.yml
+    input_mapping:
+      env: env
+    params:
+      ENV_FILE: env.yml
 
 - name: apply-product-changes
   serial: true
@@ -293,16 +293,11 @@ jobs:
     - get: variable
     - get: pipeline-utilities
 
-  - task: create-env-file
-    file: pipeline-utilities/tasks/create-env-file.yml
+  - task: generate-env
+    file: configuration/tasks/generate-env/task.yml
     params:
-      OPSMAN_TARGET: {{opsman_target}}
-      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
-      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
-      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
-      OPSMAN_USERNAME: ((opsman_user.username))
-      OPSMAN_PASSWORD: ((opsman_user.password))
-      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      YAML: ((opsman_env))
+      FILENAME: env.yml
       
   - task: apply-product-changes
     image: pcf-automation-image

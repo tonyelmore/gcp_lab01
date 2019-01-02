@@ -44,17 +44,12 @@
           globs: [((product_glob))]
       - get: configuration
       - get: variable
-    
-  - task: create-env-file
-    file: pipeline-utilities/tasks/create-env-file.yml
-    params:
-      OPSMAN_TARGET: {{opsman_target}}
-      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
-      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
-      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
-      OPSMAN_USERNAME: ((opsman_user.username))
-      OPSMAN_PASSWORD: ((opsman_user.password))
-      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+
+    - task: generate-env
+      file: configuration/tasks/generate-env/task.yml
+      params:
+        YAML: ((opsman_env))
+        FILENAME: env.yml
 
     - task: upload-and-stage-product
       image: pcf-automation-image
@@ -88,16 +83,11 @@
       - get: variable
       - get: pipeline-utilities
 
-  - task: create-env-file
-    file: pipeline-utilities/tasks/create-env-file.yml
-    params:
-      OPSMAN_TARGET: {{opsman_target}}
-      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
-      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
-      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
-      OPSMAN_USERNAME: ((opsman_user.username))
-      OPSMAN_PASSWORD: ((opsman_user.password))
-      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+    - task: generate-env
+      file: configuration/tasks/generate-env/task.yml
+      params:
+        YAML: ((opsman_env))
+        FILENAME: env.yml
 
     - task: extract-((product_name))-secrets
       file: pipeline-utilities/tasks/create-product-secrets.yml
@@ -148,16 +138,11 @@
       - get: configuration
       - get: pipeline-utilities
     
-    - task: create-env-file
-      file: pipeline-utilities/tasks/create-env-file.yml
+    - task: generate-env
+      file: configuration/tasks/generate-env/task.yml
       params:
-        OPSMAN_TARGET: {{opsman_target}}
-        OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
-        OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
-        OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
-        OPSMAN_USERNAME: ((opsman_user.username))
-        OPSMAN_PASSWORD: ((opsman_user.password))
-        OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+        YAML: ((opsman_env))
+        FILENAME: env.yml
 
     - task: upload-stemcell-((product_name))
       image: pcf-automation-image
