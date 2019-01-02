@@ -248,8 +248,6 @@ jobs:
         globs:
         - '*.tgz'
         unpack: true
-      passed:
-      - upgrade-opsman
       trigger: true
     - get: pcf-automation-tasks
       params:
@@ -346,8 +344,6 @@ jobs:
         globs:
         - '*.tgz'
         unpack: true
-      passed:
-      - upgrade-opsman
       trigger: true
     - get: pcf-automation-tasks
       params:

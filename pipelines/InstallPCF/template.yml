@@ -32,8 +32,8 @@
         params:
           unpack: true
           globs: ["*.tgz"]
-        passed:
-        - upgrade-opsman
+        # passed:
+        # - upgrade-opsman
         trigger: true
       - get: pcf-automation-tasks
         params:
@@ -146,8 +146,8 @@
         params:
           unpack: true
           globs: ["*.tgz"]
-        passed:
-        - upgrade-opsman
+        # passed:
+        # - upgrade-opsman
         trigger: true
       - get: pcf-automation-tasks
         params:
