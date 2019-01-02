@@ -311,8 +311,8 @@ jobs:
     task: create-env-file
   - file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-      PRODUCT_cloud_controller/apps_domain: apps.((env-name)).telmore.io
-      PRODUCT_cloud_controller/system_domain: sys.((env-name)).telmore.io
+      PRODUCT_cloud_controller/apps_domain: apps.((foundation)).telmore.io
+      PRODUCT_cloud_controller/system_domain: sys.((foundation)).telmore.io
       PRODUCT_networking_poe_ssl_certs_0/certificate: ((networking_cert.certificate))
       PRODUCT_networking_poe_ssl_certs_0/name: Certificate_1
       PRODUCT_networking_poe_ssl_certs_0/privatekey: ((networking_cert.private_key))

@@ -11,5 +11,5 @@ product_secrets:
   PRODUCT_networking_poe_ssl_certs_0/name: Certificate_1
   PRODUCT_uaa/service_provider_key_credentials/certificate: ((uaa_cert.certificate))
   PRODUCT_uaa/service_provider_key_credentials/privatekey: ((uaa_cert.private_key))
-  PRODUCT_cloud_controller/apps_domain: apps.((env-name)).telmore.io
-  PRODUCT_cloud_controller/system_domain: sys.((env-name)).telmore.io
+  PRODUCT_cloud_controller/apps_domain: apps.((foundation)).telmore.io
+  PRODUCT_cloud_controller/system_domain: sys.((foundation)).telmore.io
