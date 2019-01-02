@@ -122,21 +122,16 @@ jobs:
       put: state
       params: { file: generated-state/state.yml }
 
-  # - task: create-env-file
-  #   file: pipeline-utilities/tasks/create-env-file.yml
-  #   params:
-  #     OPSMAN_TARGET: {{opsman_target}}
-  #     OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
-  #     OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
-  #     OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
-  #     OPSMAN_USERNAME: ((opsman_user.username))
-  #     OPSMAN_PASSWORD: ((opsman_user.password))
-  #     OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
-  - task: generate-env
-    file: configuration/tasks/generate-env/task.yml
+  - task: create-env-file
+    file: pipeline-utilities/tasks/create-env-file.yml
     params:
-      YAML: ((opsman_env))
-      FILENAME: env.yml
+      OPSMAN_TARGET: {{opsman_target}}
+      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
+      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
+      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
+      OPSMAN_USERNAME: ((opsman_user.username))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
 
   - task: generate-auth
     file: pipeline-utilities/tasks/create-auth-file.yml
@@ -198,11 +193,16 @@ jobs:
     - get: configuration
     - get: variable
     - get: pipeline-utilities
-  - task: generate-env
-    file: configuration/tasks/generate-env/task.yml
+  - task: create-env-file
+    file: pipeline-utilities/tasks/create-env-file.yml
     params:
-      YAML: ((opsman_env))
-      FILENAME: env.yml
+      OPSMAN_TARGET: {{opsman_target}}
+      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
+      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
+      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
+      OPSMAN_USERNAME: ((opsman_user.username))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
   - task: export-installation
     image: pcf-automation-image
     file: pcf-automation-tasks/tasks/export-installation.yml
@@ -247,11 +247,16 @@ jobs:
         opsman-configuration: ((opsman-configuration))
       FILENAME: opsman.yml
 
-  - task: generate-env
-    file: configuration/tasks/generate-env/task.yml
+  - task: create-env-file
+    file: pipeline-utilities/tasks/create-env-file.yml
     params:
-      YAML: ((opsman_env))
-      FILENAME: env.yml
+      OPSMAN_TARGET: {{opsman_target}}
+      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
+      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
+      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
+      OPSMAN_USERNAME: ((opsman_user.username))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
 
   - task: upgrade-opsman
     image: pcf-automation-image
@@ -295,11 +300,16 @@ jobs:
     - get: variable
     - get: pipeline-utilities
 
-  - task: generate-env
-    file: configuration/tasks/generate-env/task.yml
+  - task: create-env-file
+    file: pipeline-utilities/tasks/create-env-file.yml
     params:
-      YAML: ((opsman_env))
-      FILENAME: env.yml
+      OPSMAN_TARGET: {{opsman_target}}
+      OPSMAN_CONNECT_TIMEOUT: {{opsman_connect_timeout}}
+      OPSMAN_REQUEST_TIMEOUT: {{opsman_request_timeout}}
+      OPSMAN_SKIP_SSL_VALIDATION: {{opsman_skip_ssl_validation}}
+      OPSMAN_USERNAME: ((opsman_user.username))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
       
   - task: apply-product-changes
     image: pcf-automation-image
