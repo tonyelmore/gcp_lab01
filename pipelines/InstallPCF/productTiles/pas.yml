@@ -4,7 +4,7 @@ product_version: "^2\\.2\\.[0-9]+$"
 product_glob: "cf*.pivotal"
 product_stemcell_slug: "stemcells"
 # stemcell-version: "^3451\..*$"
-product_stemcell_version: "3586.65"
+product_stemcell_version: "3586.60"
 product_secrets:
   PRODUCT_networking_poe_ssl_certs_0/certificate: ((networking_cert.certificate))
   PRODUCT_networking_poe_ssl_certs_0/privatekey: ((networking_cert.private_key))

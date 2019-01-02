@@ -450,5 +450,5 @@ resources:
   source:
     api_token: ((pivnet_token))
     product_slug: stemcells
-    product_version: "3586.65"
+    product_version: "3586.60"
   type: pivnet
