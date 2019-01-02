@@ -311,8 +311,6 @@ jobs:
     task: create-env-file
   - file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-      PRODUCT_cloud_controller/apps_domain: apps.((foundation)).telmore.io
-      PRODUCT_cloud_controller/system_domain: system.((foundation)).telmore.io
       PRODUCT_networking_poe_ssl_certs_0/certificate: ((networking_cert.certificate))
       PRODUCT_networking_poe_ssl_certs_0/name: Certificate_1
       PRODUCT_networking_poe_ssl_certs_0/privatekey: ((networking_cert.private_key))
@@ -453,5 +451,5 @@ resources:
   source:
     api_token: ((pivnet_token))
     product_slug: stemcells
-    product_version: "3586.57"
+    product_version: "3586.65"
   type: pivnet
