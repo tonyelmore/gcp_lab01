@@ -44,6 +44,7 @@
           globs: [((product_glob))]
       - get: configuration
       - get: variable
+      - get: pipeline-utilities
 
     # - task: generate-env
     #   file: configuration/tasks/generate-env/task.yml
