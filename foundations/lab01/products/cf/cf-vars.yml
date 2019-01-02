@@ -1,0 +1,31 @@
+network_name: pas
+singleton_availability_zone: "null"
+
+networking_poe_ssl_certs_0/certificate: "overriden by security"
+networking_poe_ssl_certs_0/privatekey: "overriden by security"
+networking_poe_ssl_certs_0/name: "overriden by security"
+uaa/service_provider_key_credentials/certificate: "overriden by security"
+uaa/service_provider_key_credentials/privatekey: "overriden by security"
+cloud_controller/apps_domain: "overriden by security"
+cloud_controller/system_domain: "overriden by security"
+
+credhub_key_encryption_passwords_0/key: "someencryptionpassword"
+credhub_key_encryption_passwords_0/name: "credhubencyrptionpassword"
+mysql_monitor/recipient_email: "aelmore@pivotal.io"
+security_acknowledgement: "x"
+
+ha_proxy/skip_cert_verify: true
+diego_cell_instances: 4
+# disable credhub until PAS 2.5
+credhub_instances: 0
+# disable internal MySQL
+mysql_instances: 0
+mysql_proxy_instances: 0
+mysql_monitor_instances: 0
+backup_restore_instances: 0
+# disable haproxy
+ha_proxy_instances: 0
+# disable TCP proxy
+tcp_router_instances: 0
+# disable the NFS server
+nfs_server_instances: 0

@@ -113,12 +113,12 @@
         vars: variable
         secrets: secrets
       params:
-        CONFIG_FILE: ((foundation))/config/((product_name)).yml
+        CONFIG_FILE: foundations/((foundation))/products/((product_name))/((product_name)).yml
         VARS_FILES: |
           vars/((product_location))/product-default-vars.yml
           vars/((product_location))/errand-vars.yml
           vars/((product_location))/resource-vars.yml
-          vars/((foundation))/config/((product_name))-vars.yml
+          vars/foundations/((foundation))/products/((product_name))/((product_name))-vars.yml
           secrets/product.yml
         ENV_FILE: env.yml
 
