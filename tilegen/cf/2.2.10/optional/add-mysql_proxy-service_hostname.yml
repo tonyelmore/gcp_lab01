@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.mysql_proxy.service_hostname?
+  value:
+    value: ((mysql_proxy/service_hostname))

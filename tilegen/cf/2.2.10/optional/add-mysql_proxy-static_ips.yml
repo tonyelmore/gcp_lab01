@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.mysql_proxy.static_ips?
+  value:
+    value: ((mysql_proxy/static_ips))

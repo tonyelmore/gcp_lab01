@@ -1,0 +1,3 @@
+- type: replace
+  path: /resource-config?/backup-prepare?/elb_names?
+  value: ((backup-prepare_elb_names))

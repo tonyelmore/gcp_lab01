@@ -1,0 +1,3 @@
+- type: replace
+  path: /resource-config?/service-discovery-controller?/nsx_security_groups?
+  value: ((service-discovery-controller_nsx_security_groups))

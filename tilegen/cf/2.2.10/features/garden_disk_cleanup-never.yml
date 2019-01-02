@@ -1,0 +1,6 @@
+- type: replace
+  path: /product-properties/.properties.garden_disk_cleanup?
+  value:
+    value: never
+- type: remove
+  path: /product-properties/.properties.garden_disk_cleanup.threshold.cleanup_threshold_in_mb?
