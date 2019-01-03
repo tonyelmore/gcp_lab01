@@ -10,7 +10,7 @@ uaa/service_provider_key_credentials/certificate: "overriden by security"
 uaa/service_provider_key_credentials/privatekey: "overriden by security"
 
 cloud_controller/apps_domain: apps.lab01.telmore.io
-cloud_controller/system_domain: system.lab01.telmore.io
+cloud_controller/system_domain: sys.lab01.telmore.io
 
 credhub_key_encryption_passwords_0/key: "someencryptionpassword"
 credhub_key_encryption_passwords_0/name: "credhubencyrptionpassword"
