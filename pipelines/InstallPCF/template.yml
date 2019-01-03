@@ -157,7 +157,7 @@
       - get: ((product_name))-stemcell
         trigger: true
         params:
-          globs: ["*-azure*"]
+          globs: ["*-((stemcell_iaas))*"]
       - get: pipeline-utilities
     
     - task: create-env-file

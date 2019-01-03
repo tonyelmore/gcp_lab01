@@ -1,3 +1,4 @@
+stemcell_iaas: google
 opsman_target: https://pcf.lab01.telmore.io
 opsman_skip_ssl_validation: true
 opsman_admin_username: admin

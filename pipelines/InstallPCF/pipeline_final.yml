@@ -352,7 +352,7 @@ jobs:
     - get: cf-stemcell
       params:
         globs:
-        - '*-azure*'
+        - '*-((stemcell_iaas))*'
       trigger: true
     - get: pipeline-utilities
   - file: pipeline-utilities/tasks/create-env-file.yml
