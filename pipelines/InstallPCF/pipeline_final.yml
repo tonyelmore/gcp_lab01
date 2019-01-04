@@ -24,7 +24,10 @@ jobs:
       trigger: true
   - file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
+      PRODUCT_decryption-passphrase: ((opsman_decryption_passphrase))
       PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
+      PRODUCT_password: ((opsman_user.password))
+      PRODUCT_username: ((opsman_user.username))
     task: create-opsman-secrets
   - ensure:
       params:
