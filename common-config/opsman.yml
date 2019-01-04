@@ -14,11 +14,3 @@ opsman-configuration:
     public_ip: ((public_ip))
     private_ip: ((private_ip))
 
-opsman_env:
-  target: https://pcf.lab01.telmore.io
-  connect-timeout: 30            # default 5
-  request-timeout: 1800          # default 1800
-  skip-ssl-validation: true     # default false
-  # username: ((opsman_user.username))
-  # password: ((opsman_user.password))
-  # decryption-passphrase: ((opsman_decryption_passphrase))
