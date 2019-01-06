@@ -21,14 +21,18 @@ ha_proxy/skip_cert_verify: true
 diego_cell_instances: 4
 # disable credhub until PAS 2.5
 credhub_instances: 0
-# disable internal MySQL
-mysql_instances: 0
-mysql_proxy_instances: 0
-mysql_monitor_instances: 0
-backup_restore_instances: 0
+
+# # disable internal MySQL
+# mysql_instances: 0
+# mysql_proxy_instances: 0
+# mysql_monitor_instances: 0
+# backup_restore_instances: 0
+
 # disable haproxy
 ha_proxy_instances: 0
+
 # disable TCP proxy
 tcp_router_instances: 0
+
 # disable the NFS server
 nfs_server_instances: 0
