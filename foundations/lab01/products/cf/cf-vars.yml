@@ -9,6 +9,10 @@ networking_poe_ssl_certs_0/name: "overriden by security"
 uaa/service_provider_key_credentials/certificate: "overriden by security"
 uaa/service_provider_key_credentials/privatekey: "overriden by security"
 
+router_elb_names:
+  - tcp:lab01-cf-ws
+  - http:lab01-cf-http
+
 cloud_controller/apps_domain: apps.lab01.telmore.io
 cloud_controller/system_domain: sys.lab01.telmore.io
 
