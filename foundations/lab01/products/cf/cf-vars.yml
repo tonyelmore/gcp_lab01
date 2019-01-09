@@ -17,8 +17,9 @@ credhub_key_encryption_passwords_0/name: "credhubencyrptionpassword"
 mysql_monitor/recipient_email: "aelmore@pivotal.io"
 security_acknowledgement: "x"
 
-# ha_proxy/skip_cert_verify: true
+ha_proxy/skip_cert_verify: true
 # diego_cell_instances: 4
+
 # disable credhub until PAS 2.5
 credhub_instances: 0
 

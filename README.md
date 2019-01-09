@@ -31,13 +31,15 @@ https://cloud.google.com/storage/docs/using-object-versioning#enable
 
 gsutil versioning set on gs://[BUCKET_NAME]
 
-### Setting JSON in credhub as a value
-credhub set -n /concourse/main/opsman_service_account_json -t value -v "$(cat sa-aelmore-dc48ffcab2d2.json)"
-
 ## Required Credhub values
-pivnet_token
-gcp-lab01-cert                  (see generateCerts.sh)
+
+* pivnet_token
+* gcp-lab01-cert                  (see generateCerts.sh)
 * credhub set -n /concourse/main/opsman_service_account_json -t value -v "$(cat control-plane/sa-aelmore-dc48ffcab2d2.json)"
 * credhub set -n concourse/main/telmore-github-creds -t ssh -u ~/.ssh/tonyelmore_github.pub -p ~/.ssh/tonyelmore_github
-credhub set -n concourse/main/opsman_decryption_passphrase -t value -v SomeDecryptionPassword
-credhub set -n concourse/main/opsman_user -t user -z opsman -w opsmanpassword
+* credhub set -n concourse/main/opsman_decryption_passphrase -t value -v SomeDecryptionPassword
+* credhub set -n concourse/main/opsman_user -t user -z opsman -w opsmanpassword
+
+# How to get Concourse credentials for admin user
+* terraform output concourse_password
+* BUT - to login to concourse there is a script in control_plane for login_concourse.sh
