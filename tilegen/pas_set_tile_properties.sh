@@ -1,11 +1,14 @@
 productName="cf"
-productVersion="2.2.10"
+productVersion="2.3.5"
 env=lab01
 
 mkdir -p ../foundations/$env/products/$productName
 
 bosh int $productName/$productVersion/product.yml \
     -o $productName/$productVersion/features/haproxy_forward_tls-disable.yml \
+    -o $productName/$productVersion/resource/router_elb_names.yml \
+    -o $productName/$productVersion/features/mysql_activity_logging-disable.yml \
+    -o $productName/$productVersion/network/3-az-configuration.yml \
     > ../foundations/$env/products/$productName/$productName.yml
 
 touch -a ../foundations/$env/products/$productName/$productName-vars.yml

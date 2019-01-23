@@ -1,10 +1,10 @@
 product_name: cf
 product_location: tilegen/cf/2.2.10
-product_version: "^2\\.2\\.[0-9]+$"
+product_version: "^2\\.3\\.[0-9]+$"
 product_glob: "cf*.pivotal"
-product_stemcell_slug: "stemcells"
+product_stemcell_slug: "stemcells-ubuntu-xenial"
 # stemcell-version: "^3451\..*$"
-product_stemcell_version: "3586.60"
+product_stemcell_version: "97.47"
 product_secrets:
   PRODUCT_networking_poe_ssl_certs_0/certificate: ((networking_cert.certificate))
   PRODUCT_networking_poe_ssl_certs_0/privatekey: ((networking_cert.private_key))

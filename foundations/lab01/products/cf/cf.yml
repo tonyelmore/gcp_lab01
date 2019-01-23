@@ -1,7 +1,4 @@
 errand-config:
-  delete-pivotal-account:
-    post-deploy-state: ((delete-pivotal-account_post_deploy_state))
-    pre-delete-state: ((delete-pivotal-account_pre_delete_state))
   deploy-autoscaler:
     post-deploy-state: ((deploy-autoscaler_post_deploy_state))
     pre-delete-state: ((deploy-autoscaler_pre_delete_state))
@@ -31,6 +28,8 @@ network-properties:
     name: ((network_name))
   other_availability_zones:
   - name: ((singleton_availability_zone))
+  - name: ((az2_name))
+  - name: ((az3_name))
   singleton_availability_zone:
     name: ((singleton_availability_zone))
 product-name: cf
@@ -107,8 +106,12 @@ product-properties:
     value: ((cf_networking_database_connection_timeout))
   .properties.cf_networking_enable_space_developer_self_service:
     value: ((cf_networking_enable_space_developer_self_service))
+  .properties.cf_networking_internal_domain:
+    value: ((cf_networking_internal_domain))
   .properties.cloud_controller_default_health_check_timeout:
     value: ((cloud_controller_default_health_check_timeout))
+  .properties.cloud_controller_default_stack:
+    value: default
   .properties.container_networking_interface_plugin:
     value: silk
   .properties.container_networking_interface_plugin.silk.enable_log_traffic:
@@ -132,12 +135,8 @@ product-properties:
       provider: ((credhub_key_encryption_passwords_0/provider))
   .properties.diego_log_timestamp_format:
     value: rfc3339
-  .properties.enable_grootfs:
-    value: ((enable_grootfs))
   .properties.enable_log_cache:
     value: ((enable_log_cache))
-  .properties.enable_service_discovery_for_apps:
-    value: ((enable_service_discovery_for_apps))
   .properties.garden_disk_cleanup:
     value: threshold
   .properties.gorouter_ssl_ciphers:
@@ -153,9 +152,7 @@ product-properties:
   .properties.haproxy_ssl_ciphers:
     value: ((haproxy_ssl_ciphers))
   .properties.mysql_activity_logging:
-    value: enable
-  .properties.mysql_activity_logging.enable.audit_logging_events:
-    value: ((mysql_activity_logging/enable/audit_logging_events))
+    value: disable
   .properties.networking_poe_ssl_certs:
     value:
     - certificate:
@@ -164,6 +161,8 @@ product-properties:
       name: ((networking_poe_ssl_certs_0/name))
   .properties.nfs_volume_driver:
     value: enable
+  .properties.push_apps_manager_app_poll_interval:
+    value: ((push_apps_manager_app_poll_interval))
   .properties.push_apps_manager_currency_lookup:
     value: ((push_apps_manager_currency_lookup))
   .properties.push_apps_manager_display_plan_prices:
@@ -174,14 +173,14 @@ product-properties:
     value:
     - href: /marketplace
       name: Marketplace
-    - href: https://docs.pivotal.io/pivotalcf/2-2/pas/intro.html
+    - href: https://docs.pivotal.io/pivotalcf/2-3/pas/intro.html
       name: Docs
     - href: /tools
       name: Tools
   .properties.push_apps_manager_poll_interval:
     value: ((push_apps_manager_poll_interval))
-  .properties.rep_proxy_enabled:
-    value: ((rep_proxy_enabled))
+  .properties.route_integrity:
+    value: tls_verify
   .properties.route_services:
     value: enable
   .properties.route_services.enable.ignore_ssl_cert_verification:
@@ -289,10 +288,10 @@ product-properties:
       cert_pem: ((uaa/service_provider_key_credentials/certificate))
       private_key_pem: ((uaa/service_provider_key_credentials/privatekey))
 resource-config:
-  backup-prepare:
+  backup_restore:
     instance_type:
-      id: ((backup-prepare_instance_type))
-    instances: ((backup-prepare_instances))
+      id: ((backup_restore_instance_type))
+    instances: ((backup_restore_instances))
   clock_global:
     instance_type:
       id: ((clock_global_instance_type))
@@ -364,13 +363,10 @@ resource-config:
     persistent_disk:
       size_mb: ((nfs_server_persistent_disk_size))
   router:
+    elb_names: ((router_elb_names))
     instance_type:
       id: ((router_instance_type))
     instances: ((router_instances))
-  service-discovery-controller:
-    instance_type:
-      id: ((service-discovery-controller_instance_type))
-    instances: ((service-discovery-controller_instances))
   syslog_adapter:
     instance_type:
       id: ((syslog_adapter_instance_type))

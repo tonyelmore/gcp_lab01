@@ -446,12 +446,12 @@ resources:
   source:
     api_token: ((pivnet_token))
     product_slug: cf
-    product_version: ^2\.2\.[0-9]+$
+    product_version: ^2\.3\.[0-9]+$
     sort_by: semver
   type: pivnet
 - name: cf-stemcell
   source:
     api_token: ((pivnet_token))
-    product_slug: stemcells
-    product_version: "3586.60"
+    product_slug: stemcells-ubuntu-xenial
+    product_version: "97.47"
   type: pivnet

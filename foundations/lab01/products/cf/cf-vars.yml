@@ -13,6 +13,9 @@ router_elb_names:
   - tcp:lab01-cf-ws
   - http:lab01-cf-http
 
+  #??? lab01-httpslb    <-- this is the name of the backend service, 
+  # but that is what the error was complaining about
+
 cloud_controller/apps_domain: apps.lab01.telmore.io
 cloud_controller/system_domain: sys.lab01.telmore.io
 
