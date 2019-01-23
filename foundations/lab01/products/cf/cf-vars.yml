@@ -13,7 +13,7 @@ router_elb_names:
   - tcp:lab01-cf-ws
   - https:lab01-httpslb
 
-#  - http:lab01-cf-http
+#  - http:lab01-cf-http   <-- but this is the name of the load balancer
 
   #??? lab01-httpslb    <-- this is the name of the backend service, 
   # but that is what the error was complaining about
