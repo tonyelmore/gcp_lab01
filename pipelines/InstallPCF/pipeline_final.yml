@@ -331,9 +331,9 @@ jobs:
       CONFIG_FILE: foundations/((foundation))/products/cf/cf.yml
       ENV_FILE: env.yml
       VARS_FILES: |
-        vars/tilegen/cf/2.2.10/product-default-vars.yml
-        vars/tilegen/cf/2.2.10/errand-vars.yml
-        vars/tilegen/cf/2.2.10/resource-vars.yml
+        vars/tilegen/cf/2.3.5/product-default-vars.yml
+        vars/tilegen/cf/2.3.5/errand-vars.yml
+        vars/tilegen/cf/2.3.5/resource-vars.yml
         vars/foundations/((foundation))/products/cf/cf-vars.yml
         secrets/product.yml
     task: configure-cf

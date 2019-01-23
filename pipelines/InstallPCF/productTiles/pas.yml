@@ -1,5 +1,5 @@
 product_name: cf
-product_location: tilegen/cf/2.2.10
+product_location: tilegen/cf/2.3.5
 product_version: "^2\\.3\\.[0-9]+$"
 product_glob: "cf*.pivotal"
 product_stemcell_slug: "stemcells-ubuntu-xenial"
