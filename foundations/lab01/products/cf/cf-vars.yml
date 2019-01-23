@@ -11,8 +11,9 @@ uaa/service_provider_key_credentials/privatekey: "overriden by security"
 
 router_elb_names:
   - tcp:lab01-cf-ws
-  - http:lab01-cf-http
   - https:lab01-httpslb
+
+#  - http:lab01-cf-http
 
   #??? lab01-httpslb    <-- this is the name of the backend service, 
   # but that is what the error was complaining about
