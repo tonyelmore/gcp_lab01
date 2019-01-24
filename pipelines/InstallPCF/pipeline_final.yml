@@ -184,13 +184,13 @@ jobs:
       env: env
       image: opsman-image
       installation: installation
-      state: configuration
+      state: state
       vars: variable
     params:
       ENV_FILE: env.yml
       INSTALLATION_FILE: installation.zip
       OPSMAN_CONFIG_FILE: common-config/opsman.yml
-      STATE_FILE: state/state.yml
+      STATE_FILE: state.yml
     task: upgrade-opsman
   - file: pcf-automation-tasks/tasks/apply-director-changes.yml
     image: pcf-automation-image
