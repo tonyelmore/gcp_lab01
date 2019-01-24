@@ -173,6 +173,13 @@ jobs:
       OPSMAN_TARGET: ((opsman_target))
       OPSMAN_USERNAME: ((opsman_user.username))
     task: create-env-file
+  - file: pipeline-utilities/tasks/create-product-secrets.yml
+    params:
+      PRODUCT_decryption-passphrase: ((opsman_decryption_passphrase))
+      PRODUCT_opsman_service_account_json: ((opsman_service_account_json))
+      PRODUCT_password: ((opsman_user.password))
+      PRODUCT_username: ((opsman_user.username))
+    task: create-opsman-secrets
   - ensure:
       params:
         file: generated-state/state.yml
@@ -191,6 +198,9 @@ jobs:
       INSTALLATION_FILE: installation.zip
       OPSMAN_CONFIG_FILE: common-config/opsman.yml
       STATE_FILE: state.yml
+      VARS_FILES: |
+        vars/foundations/((foundation))/opsman-vars.yml
+        secrets/product.yml
     task: upgrade-opsman
   - file: pcf-automation-tasks/tasks/apply-director-changes.yml
     image: pcf-automation-image
