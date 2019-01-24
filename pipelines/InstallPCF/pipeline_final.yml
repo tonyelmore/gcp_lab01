@@ -161,6 +161,7 @@ jobs:
       - export-installation
     - get: configuration
     - get: variable
+    - get: pipeline-utilities
   - file: pipeline-utilities/tasks/create-env-file.yml
     params:
       OPSMAN_CONNECT_TIMEOUT: ((opsman_connect_timeout))

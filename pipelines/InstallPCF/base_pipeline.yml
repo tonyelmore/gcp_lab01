@@ -240,8 +240,7 @@ jobs:
       passed: [ export-installation ]
     - get: configuration
     - get: variable
-    # Unused???
-    # - get: pipeline-utilities
+    - get: pipeline-utilities
 
   # - task: generate-opsman-config
   #   file: configuration/tasks/generate-config/task.yml
