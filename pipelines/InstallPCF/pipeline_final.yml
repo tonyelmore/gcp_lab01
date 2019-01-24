@@ -159,6 +159,7 @@ jobs:
     - get: installation
       passed:
       - export-installation
+    - get: state
     - get: configuration
     - get: variable
     - get: pipeline-utilities
@@ -189,6 +190,7 @@ jobs:
       ENV_FILE: env.yml
       INSTALLATION_FILE: installation.zip
       OPSMAN_CONFIG_FILE: common-config/opsman.yml
+      STATE_FILE: state/state.yml
     task: upgrade-opsman
   - file: pcf-automation-tasks/tasks/apply-director-changes.yml
     image: pcf-automation-image

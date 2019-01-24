@@ -238,6 +238,7 @@ jobs:
         globs: [((opsman_image_wildcard))]
     - get: installation
       passed: [ export-installation ]
+    - get: state
     - get: configuration
     - get: variable
     - get: pipeline-utilities
@@ -273,6 +274,7 @@ jobs:
     params:
       ENV_FILE: env.yml
       OPSMAN_CONFIG_FILE: common-config/opsman.yml
+      STATE_FILE: state/state.yml
       INSTALLATION_FILE: installation.zip  # This is the default - only here for clarity - this is for director only
     ensure: *make-state-commit
 
