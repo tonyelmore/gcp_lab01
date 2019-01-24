@@ -161,12 +161,6 @@ jobs:
       - export-installation
     - get: configuration
     - get: variable
-  - file: configuration/tasks/generate-config/task.yml
-    params:
-      FILENAME: opsman.yml
-      YAML:
-        opsman-configuration: ((opsman-configuration))
-    task: generate-opsman-config
   - file: pipeline-utilities/tasks/create-env-file.yml
     params:
       OPSMAN_CONNECT_TIMEOUT: ((opsman_connect_timeout))
@@ -193,7 +187,7 @@ jobs:
     params:
       ENV_FILE: env.yml
       INSTALLATION_FILE: installation.zip
-      OPSMAN_CONFIG_FILE: opsman.yml
+      OPSMAN_CONFIG_FILE: common-config/opsman.yml
       STATE_FILE: ((foundation))/state/state.yml
     task: upgrade-opsman
   - file: pcf-automation-tasks/tasks/apply-director-changes.yml
