@@ -1,5 +1,6 @@
 active_products:
   pas.yml
+  healthwatch.yml
   
 apm_product:
   product_location: tilegen/apmPostgres/1.5.1-build.28
