@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.properties.metric_prefix?
+  value:
+    value: ((metric_prefix))

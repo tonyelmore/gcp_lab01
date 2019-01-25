@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.properties.https_proxy_url?
+  value:
+    value: ((https_proxy_url))

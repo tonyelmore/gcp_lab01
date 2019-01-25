@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.properties.tags?
+  value:
+    value: ((tags))

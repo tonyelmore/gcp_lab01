@@ -1,0 +1,5 @@
+- type: replace
+  path: /product-properties/.properties.additional_api_key_5?
+  value:
+    value:
+      secret: ((additional_api_key_5))

@@ -1,0 +1,3 @@
+datadog-firehose-nozzle_instance_type: automatic
+datadog-firehose-nozzle_instances: automatic
+datadog-firehose-nozzle_persistent_disk_size: automatic

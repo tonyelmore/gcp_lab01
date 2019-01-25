@@ -1,0 +1,88 @@
+product-name: datadog
+network-properties:
+  network:
+    name: ((network_name))
+  other_availability_zones:
+  - name: ((singleton_availability_zone))
+  singleton_availability_zone:
+    name: ((singleton_availability_zone))
+product-properties:
+  .properties.additional_api_url_1:
+    value: ((additional_api_url_1))
+  .properties.additional_api_url_2:
+    value: ((additional_api_url_2))
+  .properties.additional_api_url_3:
+    value: ((additional_api_url_3))
+  .properties.additional_api_url_4:
+    value: ((additional_api_url_4))
+  .properties.additional_api_url_5:
+    value: ((additional_api_url_5))
+  .properties.address_tag:
+    value: ((address_tag))
+  .properties.agent_listen_port:
+    value: ((agent_listen_port))
+  .properties.api_key:
+    value:
+      secret: ((api_key))
+  .properties.api_url:
+    value: ((api_url))
+  .properties.app_metrics:
+    value: ((app_metrics))
+  .properties.check_runners:
+    value: ((check_runners))
+  .properties.disable_access_control:
+    value: ((disable_access_control))
+  .properties.enable_gohai:
+    value: ((enable_gohai))
+  .properties.firehose_subscription_id:
+    value: ((firehose_subscription_id))
+  .properties.flush_duration_seconds:
+    value: ((flush_duration_seconds))
+  .properties.flush_max_bytes:
+    value: ((flush_max_bytes))
+  .properties.forwarder_num_workers:
+    value: ((forwarder_num_workers))
+  .properties.generate_disk_config:
+    value: ((generate_disk_config))
+  .properties.generate_disk_config_all_partitions:
+    value: ((generate_disk_config_all_partitions))
+  .properties.generate_disk_config_tag_by_filesystem:
+    value: ((generate_disk_config_tag_by_filesystem))
+  .properties.generate_monit_processes:
+    value: ((generate_monit_processes))
+  .properties.generate_ntp_config:
+    value: ((generate_ntp_config))
+  .properties.generate_ntp_config_host:
+    value: ((generate_ntp_config_host))
+  .properties.generate_processes:
+    value: ((generate_processes))
+  .properties.generate_system_processes:
+    value: ((generate_system_processes))
+  .properties.grab_interval:
+    value: ((grab_interval))
+  .properties.insecure_ssl_skip_verify:
+    value: ((insecure_ssl_skip_verify))
+  .properties.ip_tag:
+    value: ((ip_tag))
+  .properties.num_workers:
+    value: ((num_workers))
+  .properties.process_agent_enabled:
+    value: ((process_agent_enabled))
+  .properties.trace_agent:
+    value: ((trace_agent))
+  .properties.uaa_client:
+    value: ((uaa_client))
+  .properties.uaa_secret:
+    value:
+      secret: ((uaa_secret))
+  .properties.use_friendly_hostname:
+    value: ((use_friendly_hostname))
+  .properties.use_uuid_hostname:
+    value: ((use_uuid_hostname))
+resource-config:
+  datadog-firehose-nozzle:
+    instance_type:
+      id: ((datadog-firehose-nozzle_instance_type))
+    instances: ((datadog-firehose-nozzle_instances))
+    persistent_disk:
+      size_mb: ((datadog-firehose-nozzle_persistent_disk_size))

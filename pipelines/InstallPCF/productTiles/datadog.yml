@@ -1,0 +1,10 @@
+product_name: datadog
+product_location: tilegen/datadog/2.5.0
+product_version: "^2\\.5\\.[0-9]+$"
+product_glob: "cf*.pivotal"
+product_stemcell_slug: "stemcells"
+product_stemcell_version: "^3468\\..*$"
+product_secrets:
+  PRODUCT_api_key: ((datadog_api_key))
+  PRODUCT_uaa_client: ((datadog_uaa_client))
+  PRODUCT_uaa_secret: ((datadog_uaa_secret))

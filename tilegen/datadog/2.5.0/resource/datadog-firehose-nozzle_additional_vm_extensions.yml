@@ -1,0 +1,3 @@
+- type: replace
+  path: /resource-config?/datadog-firehose-nozzle?/additional_vm_extensions?
+  value: ((datadog-firehose-nozzle_additional_vm_extensions))
