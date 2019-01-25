@@ -6,3 +6,5 @@ az3_name: us-west1-c
 api_key: "overriden by security"
 uaa_client: "overiden by security"
 uaa_secret: "overriden by security"
+
+insecure_ssl_skip_verify: true
