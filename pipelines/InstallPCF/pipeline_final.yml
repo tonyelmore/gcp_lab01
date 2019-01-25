@@ -542,7 +542,7 @@ jobs:
     - get: datadog-product
       params:
         globs:
-        - cf*.pivotal
+        - '*.pivotal'
     - get: configuration
     - get: variable
     - get: pipeline-utilities
