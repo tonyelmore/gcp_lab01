@@ -224,7 +224,7 @@ jobs:
       - configure-cf
       - configure-p-healthwatch
       - configure-datadog
-      - configure-apmPostgres
+      - configure-apm
       trigger: true
     - get: pcf-automation-tasks
       params:
@@ -660,7 +660,7 @@ jobs:
       ENV_FILE: env.yml
     task: upload-stemcell-datadog
   serial: true
-- name: upload-and-stage-apmPostgres
+- name: upload-and-stage-apm
   plan:
   - aggregate:
     - get: pcf-automation-image
@@ -676,7 +676,7 @@ jobs:
         globs:
         - '*.zip'
         unpack: true
-    - get: apmPostgres-product
+    - get: apm-product
       params:
         globs:
         - '*.pivotal'
@@ -697,12 +697,12 @@ jobs:
     image: pcf-automation-image
     input_mapping:
       env: env
-      product: apmPostgres-product
+      product: apm-product
     params:
       ENV_FILE: env.yml
     task: upload-and-stage-product
   serial: true
-- name: configure-apmPostgres
+- name: configure-apm
   plan:
   - aggregate:
     - get: pcf-automation-image
@@ -711,7 +711,7 @@ jobs:
         - '*.tgz'
         unpack: true
       passed:
-      - upload-and-stage-apmPostgres
+      - upload-and-stage-apm
       trigger: true
     - get: pcf-automation-tasks
       params:
@@ -734,7 +734,7 @@ jobs:
   - file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
       PRODUCT_placeholder: placeholder
-    task: extract-apmPostgres-secrets
+    task: extract-apm-secrets
   - file: pcf-automation-tasks/tasks/configure-product.yml
     image: pcf-automation-image
     input_mapping:
@@ -743,17 +743,17 @@ jobs:
       secrets: secrets
       vars: variable
     params:
-      CONFIG_FILE: foundations/((foundation))/products/apmPostgres/apmPostgres.yml
+      CONFIG_FILE: foundations/((foundation))/products/apm/apm.yml
       ENV_FILE: env.yml
       VARS_FILES: |
         vars/tilegen/apmPostgres/apm-1.6.0-build.41/product-default-vars.yml
         vars/tilegen/apmPostgres/apm-1.6.0-build.41/errand-vars.yml
         vars/tilegen/apmPostgres/apm-1.6.0-build.41/resource-vars.yml
-        vars/foundations/((foundation))/products/apmPostgres/apmPostgres-vars.yml
+        vars/foundations/((foundation))/products/apm/apm-vars.yml
         secrets/product.yml
-    task: configure-apmPostgres
+    task: configure-apm
   serial: true
-- name: upload-stemcell-apmPostgres
+- name: upload-stemcell-apm
   plan:
   - aggregate:
     - get: pcf-automation-image
@@ -769,7 +769,7 @@ jobs:
         globs:
         - '*.zip'
         unpack: true
-    - get: apmPostgres-stemcell
+    - get: apm-stemcell
       params:
         globs:
         - '*-((stemcell_iaas))*'
@@ -789,10 +789,10 @@ jobs:
     image: pcf-automation-image
     input_mapping:
       env: env
-      stemcell: apmPostgres-stemcell
+      stemcell: apm-stemcell
     params:
       ENV_FILE: env.yml
-    task: upload-stemcell-apmPostgres
+    task: upload-stemcell-apm
   serial: true
 resource_types:
 - name: pivnet
@@ -898,14 +898,14 @@ resources:
     product_slug: stemcells
     product_version: ^3468\..*$
   type: pivnet
-- name: apmPostgres-product
+- name: apm-product
   source:
     api_token: ((pivnet_token))
-    product_slug: apmPostgres
+    product_slug: apm
     product_version: ^1\.6\.[0-9]+$
     sort_by: semver
   type: pivnet
-- name: apmPostgres-stemcell
+- name: apm-stemcell
   source:
     api_token: ((pivnet_token))
     product_slug: stemcells-ubuntu-xenial
