@@ -1,4 +1,4 @@
-product_location: tilegen/apmPostgres/apm-1.6.0-build.41
+product_location: tilegen/apmPostgres/1.6.0-build.41
 product_name: apm
 product_version: "^1\\.6\\.[0-9]+$"
 product_glob: "*.pivotal"
