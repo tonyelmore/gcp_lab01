@@ -746,9 +746,9 @@ jobs:
       CONFIG_FILE: foundations/((foundation))/products/apm/apm.yml
       ENV_FILE: env.yml
       VARS_FILES: |
-        vars/tilegen/apmPostgres/apm-1.6.0-build.41/product-default-vars.yml
-        vars/tilegen/apmPostgres/apm-1.6.0-build.41/errand-vars.yml
-        vars/tilegen/apmPostgres/apm-1.6.0-build.41/resource-vars.yml
+        vars/tilegen/apmPostgres/1.6.0-build.41/product-default-vars.yml
+        vars/tilegen/apmPostgres/1.6.0-build.41/errand-vars.yml
+        vars/tilegen/apmPostgres/1.6.0-build.41/resource-vars.yml
         vars/foundations/((foundation))/products/apm/apm-vars.yml
         secrets/product.yml
     task: configure-apm
