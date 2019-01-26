@@ -1,0 +1,4 @@
+network_name: pas
+singleton_availability_zone: us-west1-b
+az2_name: us-west1-a
+az3_name: us-west1-c

@@ -224,6 +224,7 @@ jobs:
       - configure-cf
       - configure-p-healthwatch
       - configure-datadog
+      - configure-apmPostgres
       trigger: true
     - get: pcf-automation-tasks
       params:
@@ -659,6 +660,140 @@ jobs:
       ENV_FILE: env.yml
     task: upload-stemcell-datadog
   serial: true
+- name: upload-and-stage-apmPostgres
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      passed:
+      - upgrade-opsman
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: apmPostgres-product
+      params:
+        globs:
+        - '*.pivotal'
+    - get: configuration
+    - get: variable
+    - get: pipeline-utilities
+  - file: pipeline-utilities/tasks/create-env-file.yml
+    params:
+      OPSMAN_CONNECT_TIMEOUT: ((opsman_connect_timeout))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_REQUEST_TIMEOUT: ((opsman_request_timeout))
+      OPSMAN_SKIP_SSL_VALIDATION: ((opsman_skip_ssl_validation))
+      OPSMAN_TARGET: ((opsman_target))
+      OPSMAN_USERNAME: ((opsman_user.username))
+    task: create-env-file
+  - file: pcf-automation-tasks/tasks/upload-and-stage-product.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+      product: apmPostgres-product
+    params:
+      ENV_FILE: env.yml
+    task: upload-and-stage-product
+  serial: true
+- name: configure-apmPostgres
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      passed:
+      - upload-and-stage-apmPostgres
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: configuration
+    - get: variable
+    - get: pipeline-utilities
+  - file: pipeline-utilities/tasks/create-env-file.yml
+    params:
+      OPSMAN_CONNECT_TIMEOUT: ((opsman_connect_timeout))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_REQUEST_TIMEOUT: ((opsman_request_timeout))
+      OPSMAN_SKIP_SSL_VALIDATION: ((opsman_skip_ssl_validation))
+      OPSMAN_TARGET: ((opsman_target))
+      OPSMAN_USERNAME: ((opsman_user.username))
+    task: create-env-file
+  - file: pipeline-utilities/tasks/create-product-secrets.yml
+    params:
+      PRODUCT_placeholder: placeholder
+    task: extract-apmPostgres-secrets
+  - file: pcf-automation-tasks/tasks/configure-product.yml
+    image: pcf-automation-image
+    input_mapping:
+      config: configuration
+      env: env
+      secrets: secrets
+      vars: variable
+    params:
+      CONFIG_FILE: foundations/((foundation))/products/apmPostgres/apmPostgres.yml
+      ENV_FILE: env.yml
+      VARS_FILES: |
+        vars/tilegen/apmPostgres/apm-1.6.0-build.41/product-default-vars.yml
+        vars/tilegen/apmPostgres/apm-1.6.0-build.41/errand-vars.yml
+        vars/tilegen/apmPostgres/apm-1.6.0-build.41/resource-vars.yml
+        vars/foundations/((foundation))/products/apmPostgres/apmPostgres-vars.yml
+        secrets/product.yml
+    task: configure-apmPostgres
+  serial: true
+- name: upload-stemcell-apmPostgres
+  plan:
+  - aggregate:
+    - get: pcf-automation-image
+      params:
+        globs:
+        - '*.tgz'
+        unpack: true
+      passed:
+      - upgrade-opsman
+      trigger: true
+    - get: pcf-automation-tasks
+      params:
+        globs:
+        - '*.zip'
+        unpack: true
+    - get: apmPostgres-stemcell
+      params:
+        globs:
+        - '*-((stemcell_iaas))*'
+      trigger: true
+    - get: pipeline-utilities
+  - file: pipeline-utilities/tasks/create-env-file.yml
+    params:
+      OPSMAN_CONNECT_TIMEOUT: ((opsman_connect_timeout))
+      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      OPSMAN_PASSWORD: ((opsman_user.password))
+      OPSMAN_REQUEST_TIMEOUT: ((opsman_request_timeout))
+      OPSMAN_SKIP_SSL_VALIDATION: ((opsman_skip_ssl_validation))
+      OPSMAN_TARGET: ((opsman_target))
+      OPSMAN_USERNAME: ((opsman_user.username))
+    task: create-env-file
+  - file: pcf-automation-tasks/tasks/upload-stemcell.yml
+    image: pcf-automation-image
+    input_mapping:
+      env: env
+      stemcell: apmPostgres-stemcell
+    params:
+      ENV_FILE: env.yml
+    task: upload-stemcell-apmPostgres
+  serial: true
 resource_types:
 - name: pivnet
   source:
@@ -762,4 +897,17 @@ resources:
     api_token: ((pivnet_token))
     product_slug: stemcells
     product_version: ^3468\..*$
+  type: pivnet
+- name: apmPostgres-product
+  source:
+    api_token: ((pivnet_token))
+    product_slug: apmPostgres
+    product_version: ^1\.6\.[0-9]+$
+    sort_by: semver
+  type: pivnet
+- name: apmPostgres-stemcell
+  source:
+    api_token: ((pivnet_token))
+    product_slug: stemcells-ubuntu-xenial
+    product_version: ^170\..*$
   type: pivnet

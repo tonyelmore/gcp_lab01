@@ -1,8 +1,8 @@
-product_location: tilegen/apmPostgres/1.5.1-build.28
+product_location: tilegen/apmPostgres/apm-1.6.0-build.41
 product_name: apmPostgres
-product_version: "^1\\.5\\.[0-9]+$"
+product_version: "^1\\.6\\.[0-9]+$"
 product_glob: "*.pivotal"
-product_stemcell_slug: "stemcells"
-product_stemcell_version: "^3586\\..*$"
+product_stemcell_slug: "stemcells-ubuntu-xenial"
+product_stemcell_version: "^170\\..*$"
 product_secrets:
   PRODUCT_placeholder: placeholder

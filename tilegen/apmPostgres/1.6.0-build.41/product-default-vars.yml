@@ -1,0 +1,9 @@
+errand-runner/ingestor_instance_count: 1
+errand-runner/logs_queue_instance_count: 1
+errand-runner/logs_queue_max_retention_percentage: 85
+errand-runner/logs_queue_retention_percentage_interval: 1h
+errand-runner/logs_retention_window: 14
+errand-runner/metrics_queue_instance_count: 1
+errand-runner/metrics_retention_window: 14
+errand-runner/push_apps_log_level: error
+errand-runner/server_instance_count: 1
