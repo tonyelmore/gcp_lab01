@@ -5,7 +5,7 @@ az3_name: us-west1-c
 service_network_name: services
 
 backups_selector/gcs/project_id: "sa-aelmore"
-backups_selector/gcs/service_account_json: ((opsman_service_account_json))
+backups_selector/gcs/service_account_json: "overriden by security"
 backups_selector/gcs/bucket_name: "my-sql-backup-container"
 backups_selector/gcs/cron_schedule: "0 */8 * * *"
 backups_selector/gcs/enable_email_alerts: false

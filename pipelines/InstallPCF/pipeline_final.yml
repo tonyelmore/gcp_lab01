@@ -868,7 +868,7 @@ jobs:
     task: create-env-file
   - file: pipeline-utilities/tasks/create-product-secrets.yml
     params:
-      PRODUCT_backups_selector/azure/storage_access_key: ((storage_account_key))
+      PRODUCT_backups_selector/gcs/service_account_json: ((opsman_service_account_json))
     task: extract-pivotal-mysql-secrets
   - file: pcf-automation-tasks/tasks/configure-product.yml
     image: pcf-automation-image
