@@ -1,0 +1,16 @@
+network_name: pas
+singleton_availability_zone: us-west1-b
+az2_name: us-west1-a
+az3_name: us-west1-c
+service_network_name: services
+
+backups_selector/gcs/project_id: "sa-aelmore"
+backups_selector/gcs/service_account_json: ((opsman_service_account_json))
+backups_selector/gcs/bucket_name: "my-sql-backup-container"
+backups_selector/gcs/cron_schedule: "0 */8 * * *"
+backups_selector/gcs/enable_email_alerts: false
+global_recipient_email: aelmore@pivotal.io
+plan1_selector/single_node/az_multi_select: ["null"]
+plan2_selector/single_node/az_multi_select: ["null"]
+
+deprecated_bindings_string: "Deprecated Binds"

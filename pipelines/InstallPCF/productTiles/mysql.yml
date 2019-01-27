@@ -1,8 +1,8 @@
-product_location: tilegen/pivotal-mysql/2.4.1-build.28
+product_location: tilegen/pivotal-mysql/2.5.3-build.7
 product_name: pivotal-mysql
-product_version: "^2\\.4\\.1$"
+product_version: "^2\\.5\\.3$"
 product_glob: "*.pivotal"
 product_stemcell_slug: "stemcells-ubuntu-xenial"
-product_stemcell_version: "^97\\..*$"
+product_stemcell_version: "170.24"
 product_secrets:
   PRODUCT_backups_selector/azure/storage_access_key: ((storage_account_key))
