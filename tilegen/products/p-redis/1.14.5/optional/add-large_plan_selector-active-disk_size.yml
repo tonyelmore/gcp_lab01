@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.properties.large_plan_selector.active.disk_size?
+  value:
+    value: ((large_plan_selector/active/disk_size))

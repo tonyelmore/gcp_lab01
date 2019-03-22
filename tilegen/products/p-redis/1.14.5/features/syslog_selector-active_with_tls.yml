@@ -1,0 +1,26 @@
+- type: replace
+  path: /product-properties/.properties.syslog_selector?
+  value:
+    value: Yes with TLS encryption
+- type: remove
+  path: /product-properties/.properties.syslog_selector.active.syslog_address?
+- type: remove
+  path: /product-properties/.properties.syslog_selector.active.syslog_port?
+- type: remove
+  path: /product-properties/.properties.syslog_selector.active.syslog_transport?
+- type: replace
+  path: /product-properties/.properties.syslog_selector.active_with_tls.syslog_address?
+  value:
+    value: ((syslog_selector/active_with_tls/syslog_address))
+- type: replace
+  path: /product-properties/.properties.syslog_selector.active_with_tls.syslog_port?
+  value:
+    value: ((syslog_selector/active_with_tls/syslog_port))
+- type: replace
+  path: /product-properties/.properties.syslog_selector.active_with_tls.syslog_permitted_peer?
+  value:
+    value: ((syslog_selector/active_with_tls/syslog_permitted_peer))
+- type: replace
+  path: /product-properties/.properties.syslog_selector.active_with_tls.syslog_ca_cert?
+  value:
+    value: ((syslog_selector/active_with_tls/syslog_ca_cert))

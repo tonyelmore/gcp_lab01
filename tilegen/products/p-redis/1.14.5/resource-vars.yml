@@ -1,0 +1,7 @@
+cf-redis-broker_instance_type: automatic
+cf-redis-broker_persistent_disk_size: automatic
+dedicated-node_instance_type: automatic
+dedicated-node_instances: automatic
+dedicated-node_persistent_disk_size: automatic
+redis-on-demand-broker_instance_type: automatic
+redis-on-demand-broker_instances: automatic

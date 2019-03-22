@@ -1,0 +1,77 @@
+product-name: splunk-nozzle
+network-properties:
+  network:
+    name: ((network_name))
+  other_availability_zones:
+  - name: ((singleton_availability_zone))
+  singleton_availability_zone:
+    name: ((singleton_availability_zone))
+product-properties:
+  .properties.add_app_info:
+    value: ((add_app_info))
+  .properties.api_endpoint:
+    value: ((api_endpoint))
+  .properties.api_password:
+    value:
+      secret: ((api_password))
+  .properties.api_user:
+    value: ((api_user))
+  .properties.app_cache_invalidate_ttl:
+    value: ((app_cache_invalidate_ttl))
+  .properties.app_limits:
+    value: ((app_limits))
+  .properties.consumer_queue_size:
+    value: ((consumer_queue_size))
+  .properties.enable_event_tracing:
+    value: ((enable_event_tracing))
+  .properties.events:
+    value:
+    - HttpStartStop
+    - LogMessage
+    - ValueMetric
+    - CounterEvent
+    - Error
+    - ContainerMetric
+  .properties.flush_interval:
+    value: ((flush_interval))
+  .properties.hec_batch_size:
+    value: ((hec_batch_size))
+  .properties.hec_retries:
+    value: ((hec_retries))
+  .properties.hec_workers:
+    value: ((hec_workers))
+  .properties.ignore_missing_app:
+    value: ((ignore_missing_app))
+  .properties.missing_app_cache_invalidate_ttl:
+    value: ((missing_app_cache_invalidate_ttl))
+  .properties.nozzle_memory:
+    value: ((nozzle_memory))
+  .properties.scale_out_nozzle:
+    value: ((scale_out_nozzle))
+  .properties.skip_ssl_validation_cf:
+    value: ((skip_ssl_validation_cf))
+  .properties.skip_ssl_validation_splunk:
+    value: ((skip_ssl_validation_splunk))
+  .properties.splunk_host:
+    value: ((splunk_host))
+  .properties.splunk_index:
+    value: ((splunk_index))
+  .properties.splunk_token:
+    value:
+      secret: ((splunk_token))
+  .properties.splunk_version:
+    value: ((splunk_version))
+resource-config:
+  delete-all:
+    instance_type:
+      id: ((delete-all_instance_type))
+  deploy-all:
+    instance_type:
+      id: ((deploy-all_instance_type))
+errand-config:
+  delete-all:
+    post-deploy-state: ((delete-all_post_deploy_state))
+    pre-delete-state: ((delete-all_pre_delete_state))
+  deploy-all:
+    post-deploy-state: ((deploy-all_post_deploy_state))
+    pre-delete-state: ((deploy-all_pre_delete_state))

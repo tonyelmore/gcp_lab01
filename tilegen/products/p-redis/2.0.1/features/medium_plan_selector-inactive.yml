@@ -1,0 +1,26 @@
+- type: replace
+  path: /product-properties/.properties.medium_plan_selector?
+  value:
+    value: Plan Inactive
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.name?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.description?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.cf_service_access?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.az_single_select?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.vm_type?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.disk_size?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.timeout?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.tcp_keepalive?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.maxclients?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.lua_scripting?
+- type: remove
+  path: /product-properties/.properties.medium_plan_selector.active.instance_limit?

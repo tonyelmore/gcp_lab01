@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.properties.small_plan_selector.active.vm_type?
+  value:
+    value: ((small_plan_selector/active/vm_type))

@@ -1,0 +1,10 @@
+- type: replace
+  path: /product-properties/.properties.syslog_selector?
+  value:
+    value: "No"
+- type: remove
+  path: /product-properties/.properties.syslog_selector.active.syslog_address?
+- type: remove
+  path: /product-properties/.properties.syslog_selector.active.syslog_port?
+- type: remove
+  path: /product-properties/.properties.syslog_selector.active.syslog_transport?
