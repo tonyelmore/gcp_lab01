@@ -302,9 +302,9 @@ jobs:
       CONFIG_FILE: foundations/((foundation))/products/cf/cf.yml
       ENV_FILE: env.yml
       VARS_FILES: |
-        vars/tilegen/cf/2.3.5/product-default-vars.yml
-        vars/tilegen/cf/2.3.5/errand-vars.yml
-        vars/tilegen/cf/2.3.5/resource-vars.yml
+        vars/tilegen/cf/2.4.4/product-default-vars.yml
+        vars/tilegen/cf/2.4.4/errand-vars.yml
+        vars/tilegen/cf/2.4.4/resource-vars.yml
         vars/foundations/((foundation))/products/cf/cf-vars.yml
         secrets/product.yml
     task: configure-cf
@@ -427,12 +427,12 @@ resources:
   source:
     api_token: ((pivnet_token))
     product_slug: cf
-    product_version: ^2\.3\.[0-9]+$
+    product_version: ^2\.4\.[0-9]+$
     sort_by: semver
   type: pivnet
 - name: cf-stemcell
   source:
     api_token: ((pivnet_token))
     product_slug: stemcells-ubuntu-xenial
-    product_version: "97.47"
+    product_version: "170.39"
   type: pivnet
