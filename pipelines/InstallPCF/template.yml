@@ -76,7 +76,7 @@
 - type: replace
   path: /jobs?/-
   value:
-    name: configure-((product_name))
+    name: configure-and-apply-change-((product_name))
     serial: true
     plan:
     - aggregate:
@@ -135,6 +135,15 @@
           secrets/product.yml
         ENV_FILE: env.yml
 
+    - task: apply-product-changes-((product_name))
+      image: pcf-automation-image
+      file: configuration/tasks/product-apply-changes.yml
+      input_mapping:
+        env: env
+      params:
+        ENV_FILE: env.yml
+        PRODUCT: ((product_name))
+
 # Add upload stemcell job
 - type: replace
   path: /jobs?/-
@@ -179,9 +188,3 @@
         stemcell: ((product_name))-stemcell
       params:
         ENV_FILE: env.yml
-
-# Add config to apply-changes passed criteria
-- type: replace
-  path: /jobs/name=apply-product-changes/plan/0/aggregate/get=pcf-automation-image/passed?/-
-  value:
-    configure-((product_name))

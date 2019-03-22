@@ -296,39 +296,3 @@ jobs:
       env: env
     params:
       ENV_FILE: env.yml
-
-- name: apply-product-changes
-  serial: true
-  plan:
-  - aggregate:
-    - get: pcf-automation-image
-      params:
-        unpack: true
-        globs: ["*.tgz"]
-      trigger: true
-    - get: pcf-automation-tasks
-      params:
-        unpack: true
-        globs: ["*.zip"]
-    - get: configuration
-    - get: variable
-    - get: pipeline-utilities
-
-  - task: create-env-file
-    file: pipeline-utilities/tasks/create-env-file.yml
-    params:
-      OPSMAN_TARGET: ((opsman_target))
-      OPSMAN_CONNECT_TIMEOUT: ((opsman_connect_timeout))
-      OPSMAN_REQUEST_TIMEOUT: ((opsman_request_timeout))
-      OPSMAN_SKIP_SSL_VALIDATION: ((opsman_skip_ssl_validation))
-      OPSMAN_USERNAME: ((opsman_user.username))
-      OPSMAN_PASSWORD: ((opsman_user.password))
-      OPSMAN_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
-      
-  - task: apply-product-changes
-    image: pcf-automation-image
-    file: pcf-automation-tasks/tasks/apply-changes.yml
-    input_mapping:
-      env: env
-    params:
-      ENV_FILE: env.yml
