@@ -95,7 +95,7 @@ jobs:
       do:
         - task: make-commit
           image: platform-automation-image
-          file: configuration/proposed-tasks/make-commit.yml
+          file: configuration/tasks-proposed/make-commit.yml
           input_mapping:
             repository: state
             file-source: generated-state
