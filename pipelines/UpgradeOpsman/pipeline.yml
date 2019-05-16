@@ -29,15 +29,15 @@ resources:
   type: git
   source:
     branch: master
-    uri: ((configuration_uri))
-    private_key: ((configuration_private_key))
+    uri: git@github.com:tonyelmore/gcp_lab01.git
+    private_key: ((telmore-github-creds.private_key))
 
 - name: configuration
   type: git
   source:
     branch: master
-    uri: ((configuration_uri))
-    private_key: ((configuration_private_key))
+    uri: git@github.com:tonyelmore/gcp_lab01.git
+    private_key: ((telmore-github-creds.private_key))
 
 jobs:
 - name: install-opsman
