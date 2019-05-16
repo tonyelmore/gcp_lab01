@@ -149,41 +149,40 @@ jobs:
 
 
 
-
 - name: export-installation
-serial: true
-serial_groups: [ install ]
-plan:
-- aggregate:
+  serial: true
+  serial_groups: [ install ]
+  plan:
+  - aggregate:
     - get: configuration
-    trigger: true
-    passed: [ install-opsman ]
+      trigger: true
+      passed: [ install-opsman ]
     - get: platform-automation-image
-    resource: platform-automation
-    params:
+      resource: platform-automation
+      params:
         unpack: true
         globs: ["*image*"]
     - get: platform-automation-tasks
-    resource: platform-automation
-    params:
+      resource: platform-automation
+      params:
         unpack: true
         globs: ["*tasks*"]
-- task: credhub-interpolate
+  - task: credhub-interpolate
     image: platform-automation-image
     file: platform-automation-tasks/tasks/credhub-interpolate.yml
     params: *credhub_interpolate_params
     input_mapping:
-    files: configuration
-- task: export-installation
+      files: configuration
+  - task: export-installation
     image: platform-automation-image
     file: platform-automation-tasks/tasks/export-installation.yml
     input_mapping:
-    env: interpolated-files
+      env: interpolated-files
     params:
-    ENV_FILE: environments/((iaas))/((foundation))/config/secrets/env.yml
-- put: installation
+      ENV_FILE: environments/((iaas))/((foundation))/config/secrets/env.yml
+  - put: installation
     params:
-    file: installation/installation-*.zip
+      file: installation/installation-*.zip
 
 
 
