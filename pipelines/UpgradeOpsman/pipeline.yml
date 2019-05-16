@@ -120,8 +120,8 @@ jobs:
       env: interpolated-files
       config: interpolated-files
     params:
-      ENV_FILE: environments/((iaas)/((foundation))/config/secrets/env.yml
-      AUTH_CONFIG_FILE: environments/((iaas)/((foundation))/config/secrets/auth.yml
+      ENV_FILE: environments/((iaas))/((foundation))/config/secrets/env.yml
+      AUTH_CONFIG_FILE: environments/((iaas))/((foundation))/config/secrets/auth.yml
 
   - task: configure-director
     image: platform-automation-image
@@ -132,11 +132,11 @@ jobs:
       vars: configuration
       secrets: interpolated-files
     params:
-      ENV_FILE: environments/((iaas)/((foundation))/config/secrets/env.yml
-      DIRECTOR_CONFIG_FILE: environments/((iaas)/((foundation))/config/templates/director.yml
+      ENV_FILE: environments/((iaas))/((foundation))/config/secrets/env.yml
+      DIRECTOR_CONFIG_FILE: environments/((iaas))/((foundation))/config/templates/director.yml
       VARS_FILES: |
-        vars/environments/((iaas)/((foundation))/config/vars/director.yml 
-        secrets/environments/((iaas)/((foundation))/config/secrets/director.yml
+        vars/environments/((iaas))/((foundation))/config/vars/director.yml 
+        secrets/environments/((iaas))/((foundation))/config/secrets/director.yml
 
   - task: apply-director-changes
     image: platform-automation-image
