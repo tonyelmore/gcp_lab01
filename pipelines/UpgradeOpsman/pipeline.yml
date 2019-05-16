@@ -75,7 +75,7 @@ jobs:
 
   - task: download-create-opsman
     image: platform-automation-image
-    file: configuration/tasks/download-create-opsman.yml
+    file: configuration/tasks-proposed/download-create-opsman.yml
     input_mapping:
       download-config: configuration
       state: state
@@ -222,7 +222,7 @@ jobs:
 
   - task: download-upgrade-opsman
     image: platform-automation-image
-    file: configuration/ci/tasks/download-upgrade-opsman.yml
+    file: configuration/ci/tasks-proposed/download-upgrade-opsman.yml
     input_mapping:
       download-config: configuration
       state: state
