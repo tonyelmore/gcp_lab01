@@ -1,0 +1,3 @@
+- type: replace
+  path: /resource-config?/register-broker?/internet_connected?
+  value: ((register-broker_internet_connected))

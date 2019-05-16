@@ -40,6 +40,11 @@ gsutil versioning set on gs://[BUCKET_NAME]
 * credhub set -n concourse/main/opsman_decryption_passphrase -t value -v SomeDecryptionPassword
 * credhub set -n concourse/main/opsman_user -t user -z opsman -w opsmanpassword
 
-# How to get Concourse credentials for admin user
+## How to get Concourse credentials for admin user
 * `terraform output concourse_password`
 * BUT - to login to concourse there is a script in control_plane for login_concourse.sh
+
+
+## How to use this repo
+* NOTE: You must NOT be on the CoreLogic VPN :-) 
+* Run `control-plane/

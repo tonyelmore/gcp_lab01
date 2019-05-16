@@ -1,0 +1,24 @@
+- type: replace
+  path: /product-properties/.properties.plan5_selector?
+  value:
+    value: Active
+- type: replace
+  path: /product-properties/.properties.plan5_selector.active.multi_node_deployment?
+  value:
+    value: ((plan5_selector/active/multi_node_deployment))
+- type: replace
+  path: /product-properties/.properties.plan5_selector.active.az_multi_select?
+  value:
+    value: ((plan5_selector/active/az_multi_select))
+- type: replace
+  path: /product-properties/.properties.plan5_selector.active.access_dropdown?
+  value:
+    value: ((plan5_selector/active/access_dropdown))
+- type: replace
+  path: /product-properties/.properties.plan5_selector.active.name?
+  value:
+    value: ((plan5_selector/active/name))
+- type: replace
+  path: /product-properties/.properties.plan5_selector.active.description?
+  value:
+    value: ((plan5_selector/active/description))

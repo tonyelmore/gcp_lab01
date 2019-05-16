@@ -1,0 +1,3 @@
+- type: replace
+  path: /resource-config?/upgrade-all-service-instances?/internet_connected?
+  value: ((upgrade-all-service-instances_internet_connected))

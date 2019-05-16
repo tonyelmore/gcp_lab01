@@ -1,0 +1,3 @@
+- type: replace
+  path: /resource-config?/smoke-tests?/nsx_security_groups?
+  value: ((smoke-tests_nsx_security_groups))

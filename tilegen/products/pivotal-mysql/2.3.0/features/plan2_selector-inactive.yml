@@ -1,0 +1,20 @@
+- type: replace
+  path: /product-properties/.properties.plan2_selector?
+  value:
+    value: Inactive
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.multi_node_deployment?
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.vm_type?
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.disk_size?
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.az_multi_select?
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.access_dropdown?
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.name?
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.description?
+- type: remove
+  path: /product-properties/.properties.plan2_selector.active.instance_limit?

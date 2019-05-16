@@ -1,0 +1,3 @@
+- type: replace
+  path: /resource-config?/orphan-deployments?/nsx_security_groups?
+  value: ((orphan-deployments_nsx_security_groups))

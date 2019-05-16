@@ -1,0 +1,24 @@
+- type: replace
+  path: /product-properties/.properties.plan4_selector?
+  value:
+    value: Active
+- type: replace
+  path: /product-properties/.properties.plan4_selector.active.multi_node_deployment?
+  value:
+    value: ((plan4_selector/active/multi_node_deployment))
+- type: replace
+  path: /product-properties/.properties.plan4_selector.active.az_multi_select?
+  value:
+    value: ((plan4_selector/active/az_multi_select))
+- type: replace
+  path: /product-properties/.properties.plan4_selector.active.access_dropdown?
+  value:
+    value: ((plan4_selector/active/access_dropdown))
+- type: replace
+  path: /product-properties/.properties.plan4_selector.active.name?
+  value:
+    value: ((plan4_selector/active/name))
+- type: replace
+  path: /product-properties/.properties.plan4_selector.active.description?
+  value:
+    value: ((plan4_selector/active/description))

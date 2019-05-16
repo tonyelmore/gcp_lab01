@@ -1,0 +1,8 @@
+dedicated-mysql-broker_instance_type: automatic
+dedicated-mysql-broker_instances: automatic
+delete-all-service-instances-and-deregister-broker_instance_type: automatic
+orphan-deployments_instance_type: automatic
+plugin-tests_instance_type: automatic
+register-broker_instance_type: automatic
+smoke-tests_instance_type: automatic
+upgrade-all-service-instances_instance_type: automatic

@@ -1,0 +1,4 @@
+- type: replace
+  path: /product-properties/.properties.plan1_selector.active.instance_limit?
+  value:
+    value: ((plan1_selector/active/instance_limit))
