@@ -64,10 +64,10 @@ jobs:
     image: platform-automation-image
     file: platform-automation-tasks/tasks/credhub-interpolate.yml
     params: &credhub_interpolate_params
-      CREDHUB_CLIENT: concourse_to_credhub
-      CREDHUB_SECRET: ((concourse_credhub_client_secret))
-      CREDHUB_SERVER: https://concourse.sbx.solutions.corelogic.com:8844
-      CREDHUB_CA_CERT: ((concourse_credhub_ca))
+      CREDHUB_CLIENT: ((credhub-client))
+      CREDHUB_SECRET: ((credhub-secret))
+      CREDHUB_SERVER: ((credhub-server))
+      CREDHUB_CA_CERT: ((credhub-ca))
       PREFIX: "/concourse/((foundation))"
       INTERPOLATION_PATH: "environments/((iaas))/((foundation))/config/secrets"
     input_mapping:
