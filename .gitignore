@@ -2,4 +2,7 @@
 terraforming/
 control-plane/
 concourse-bosh-deployment/
-secrets/
+secrets/github.pem
+secrets/github.pub
+secrets/github.sh
+secrets/service_account.sh

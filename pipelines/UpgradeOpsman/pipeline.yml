@@ -68,7 +68,7 @@ jobs:
       CREDHUB_SECRET: ((credhub-secret))
       CREDHUB_SERVER: ((credhub-server))
       CREDHUB_CA_CERT: ((credhub-ca))
-      PREFIX: "/concourse/((foundation))"
+      PREFIX: "/concourse/((credhub-team))"
       INTERPOLATION_PATH: "environments/((iaas))/((foundation))/config/secrets"
     input_mapping:
       files: configuration
